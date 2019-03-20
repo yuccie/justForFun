@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .box {
+      height: 160px;
+      padding: 30px;
+      box-sizing: border-box;
+      background-color: #beceeb;
+    }
+
+    .child {
+      height: 100%;
+      background-color: #cd0000;
+    }
+
+    .box1 {
+      height: 160px;
+      padding: 30px;
+      box-sizing: border-box;
+      background-color: #beceeb;
+      position: relative;
+    }
+
+    .child1 {
+      height: 100%;
+      width: 100%;
+      background-color: #cd0000;
+      position: absolute;
+    }
+
+    .test-box {
+      display: inline-block;
+      position: relative;
+      /* 解决图片底部白边问题
+        img默认是inline元素，同时也是替换元素，而这个属性的vertical-align的默认值是baseline
+        在 CSS 中，可替换元素（replaced element）的展现效果不是由 CSS 来控制的。
+        这些元素是一种外部对象，它们外观的渲染，是独立于 CSS 的。
+        简单来说，它们的内容不受当前文档的样式的影响。CSS 可以影响可替换元素的位置，但不会影响到可替换元素自身的内容。
+        某些可替换元素，例如 <iframe> 元素，可能具有自己的样式表，但它们不会继承父文档的样式。
+        以下两种方式都可以解决白边问题
+       */
+      /* font-size: 0;  */
+      /* line-height: 0; */
+      margin-bottom: 50px;
+    }
+    img{
+      /* 根据以上分析，下面也可以解决图片白边问题，设成block也行 */
+      vertical-align: middle;
+      /* display: block; */
+    }
+
+    .prev,
+    .next {
+      width: 50%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      opacity: .5;
+    }
+
+    .prev {
+      left: 0;
+      background-color: #cd0000;
+    }
+
+    .next {
+      right: 0;
+      background-color: #34538b;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <div class="child"></div>
+  </div>
+
+  <p class="child-p"></p>
+  <p style="height: 20px;">--------这是分割线----------</p>
+
+  <div class="box1">
+    <div class="child1"></div>
+  </div>
+  <p class="child1-p" style="margin-top:50px;"></p>
+
+
+  <p style="height: 20px;">--------巧妙应用height属性----------</p>
+  <p style="height: 20px;">随便改变图片大小，遮罩层始终自适应变化/p>
+
+  <div class="test-box">
+    <a href="javascript:" class="prev" title="上一张">上一张</a>
+    <a href="javascript:" class="next" title="下一张">下一张</a>
+    <img src="./img/test-height.png">
+  </div>
+
+
+  <script>
+    function getEle(param) {
+      return document.querySelector(param)
+    }
+
+    function getHeight(ele) {
+      return window.getComputedStyle(ele).height
+    }
+
+    let child = getEle('.child')
+    let child1 = getEle('.child1')
+    getEle('.child-p').innerText = `子元素没有定位，子元素继承的高度不含padding，高度为${getHeight(child)}`
+    getEle('.child1-p').innerText = `子元素绝对定位，子元素继承的高度含padding，高度为${getHeight(child1)}`
+  </script>
+</body>
+
+</html>
