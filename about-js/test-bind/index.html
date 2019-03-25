@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <script>
+    // 硬绑定这种方式可以把 this 强制绑定到指定的对象(除了使用 new 时)，
+    // 防止函数调用应用默认绑定规则。问题在于，硬绑定会大大降低函数的灵活性，
+    // 使 用硬绑定之后就无法使用隐式绑定或者显式绑定来修改 this。
+    // 如果可以给默认绑定指定一个全局对象和 undefined 以外的值，
+    // 那就可以实现和硬绑定相同的效果，同时保留隐式绑定或者显式绑定修改 this 的能力。
+    Function.prototype.softBind = function (obj) {
+      var fn = this;
+      // 捕获所有 curried 参数
+      var curried = [].slice.call(arguments, 1);
+
+      var bound = function () {
+        return fn.apply(
+          (!this || this === (window || global)) ?
+          obj : this,
+          curried.concat.apply(curried, arguments)
+        );
+      };
+
+      bound.prototype = Object.create(fn.prototype);
+      return bound;
+    };
+
+
+    function foo() {
+      console.log("name: " + this.name);
+    }
+    var obj = {
+        name: "obj"
+      },
+      obj2 = {
+        name: "obj2"
+      },
+      obj3 = {
+        name: "obj3"
+      };
+    var fooOBJ = foo.softBind(obj);
+    fooOBJ(); // name: obj
+
+    obj2.foo = foo.softBind(obj);
+    obj2.foo(); // name: obj2 <---- 看!!!
+
+    fooOBJ.call(obj3); // name: obj3 <---- 看! 
+    
+    setTimeout( obj2.foo, 10 );//name:obj <----应用了软绑定
+
+
+
+    // 箭头函数并不是使用 function 关键字定义的，
+    // 而是使用被称为“胖箭头”的操作符 => 定 义的。
+    // 箭头函数不使用 this 的四种标准规则，而是根据外层(函数或者全局)作用域来决 定 this。
+    function foo1() {
+      return a => {
+        console.log('a的值',this.a)
+      }
+      // setTimeout(() => {
+      //   这里的this继承自foo1
+      //   console.log('a的值', this.a)
+      // })
+    }
+    var obj4 = { a : 4} 
+    var obj5 = { a : 5} 
+
+    var testFoo1 = foo1.call(obj4) 
+    // 注意这里，是对foo1绑定到obj4上返回的结果进行再次绑定，此时是无法再更改的
+    testFoo1.call(obj5) // 4,不是5
+    // foo() 内部创建的箭头函数会捕获调用时 foo() 的 this。
+    // 由于 foo() 的 this 绑定到 obj1， bar(引用箭头函数)的 this 也会绑定到 obj1，
+    // 箭头函数的绑定无法被修改。(new 也不 行!)
+
+  </script>
+</body>
+
+</html>

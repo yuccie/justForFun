@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>移动端模糊问题</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <script src="./js/lib/jquery-3.3.1.min.js"></script>
+  <style>
+    .container {
+      width: 300px;
+      height: 150px;
+    }
+  </style>  
+</head>
+<body>
+  <div class="container">
+    <canvas id="canvas" width="300" height="150" ></canvas>
+  </div>
+  <div class="container">
+    <canvas id="canvasTwo" width="300" height="150" ></canvas>
+  </div>  
+  <script>
+    let canvasDom = $('#canvas')[0];
+    let ctx = canvasDom.getContext('2d');
+    // 高清屏下显得比较模糊
+    function draw() {
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(10, 1);
+      ctx.lineTo(40, 31);
+      ctx.stroke();
+      
+      ctx.textAlign = 'center';
+      ctx.fillText('hello everyone', canvasDom.width / 2, canvasDom.height / 2);
+    }
+
+    draw();
+    
+    // 画布宽度变为600X300 两倍屏时
+    // 展示区域为300X150 相当于缩小一倍
+    // 绘制时需要将上下文调整为原来的两倍
+    let canvasTwoDom = $('#canvasTwo')[0];
+    let ctxTwo = canvasTwoDom.getContext('2d');
+
+    function drawTwo() {
+      let dpr = window.devicePixelRatio;
+      $(canvasTwoDom).css('height', canvasTwoDom.height);
+      $(canvasTwoDom).css('width', canvasTwoDom.width);
+      canvasTwoDom.width = canvasTwoDom.width * dpr;
+      canvasTwoDom.height = canvasTwoDom.height * dpr;
+
+      ctxTwo.scale(dpr, dpr);
+      ctxTwo.lineWidth = 1;
+      ctxTwo.beginPath();
+      ctxTwo.moveTo(10, 1);
+      ctxTwo.lineTo(40, 31);
+      ctxTwo.stroke();
+
+      ctxTwo.textAlign = 'center';
+      ctxTwo.fillText('hello everyone', canvasDom.width / 2, canvasDom.height / 2);      
+    }
+
+    drawTwo();    
+  </script>  
+</body>
+</html>

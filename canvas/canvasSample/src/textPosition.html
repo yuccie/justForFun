@@ -1,0 +1,62 @@
+<head>
+    <title>文本定位</title>
+    <style>
+      #canvas {
+        border: 1px solid #000;
+      }
+      .playable-code {
+        min-height: 250px;
+        min-width: 300px;
+      }
+    </style>
+</head>
+
+<canvas id="canvas" width="400" height="200" class="playable-canvas"></canvas>
+<div class="playable-buttons">
+  <input id="edit" type="button" value="Edit" />
+  <input id="reset" type="button" value="Reset" />
+</div>
+<textarea id="code" class="playable-code">
+ctx.font = "48px serif";
+ctx.textAlign="start";
+ctx.textBaseline = "hanging";
+ctx.strokeText("Hello world", 100, 100);
+
+ctx.strokeStyle = 'red';
+ctx.moveTo(100.5, 0);
+ctx.lineTo(100.5, 200);
+ctx.stroke();
+
+ctx.moveTo(0, 100.5);
+ctx.lineTo(400, 100.5);
+ctx.stroke();
+</textarea>
+
+
+<script>
+// 绘制文字相对位置都是文字的坐标位置
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var textarea = document.getElementById("code");
+var reset = document.getElementById("reset");
+var edit = document.getElementById("edit");
+var code = textarea.value;
+
+function drawCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  eval(textarea.value);
+}
+
+reset.addEventListener("click", function() {
+  textarea.value = code;
+  drawCanvas();
+});
+
+edit.addEventListener("click", function() {
+  textarea.focus();
+})
+
+textarea.addEventListener("input", drawCanvas);
+window.addEventListener("load", drawCanvas);
+
+</script>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>两种渐变色圆环</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <script src="./js/lib/jquery-3.3.1.min.js"></script>
+  <style>
+    .bigContainer {
+      width: 1200px;
+      height: 600px;
+    }
+    #canvasTwo {
+      border: 1px solid #f00;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <canvas id="canvas" width="600" height="300"></canvas>
+  </div>
+  <div class="container bigContainer">
+    <canvas id="canvasTwo" width="1200" height="600"></canvas>
+  </div>
+  <script>
+    let canvasDom = $('#canvas')[0];
+    let ctx = canvasDom.getContext('2d');
+    
+    // 利用线性渐变绘制渐变色圆环，相对好理解一些
+    function draw() {
+      ctx.lineWidth = 10;
+      let lineargradient = ctx.createLinearGradient(0, 0, 160, 0);
+      lineargradient.addColorStop(0, 'red');
+      lineargradient.addColorStop(1, 'green');      
+
+      ctx.beginPath();
+      ctx.arc(100, 100, 50, 145 * Math.PI/180, 405 * Math.PI/180, false);
+      
+      ctx.strokeStyle = lineargradient;
+      ctx.stroke();
+
+      ctx.fillStyle = lineargradient;
+      ctx.fillRect(40, 160, 120, 50);      
+    }
+
+    draw();
+
+    let canvasTwoDom = $('#canvasTwo')[0];
+    let ctxTwo = canvasTwoDom.getContext('2d');
+    // 利用径向渐变绘制渐变色圆环，因为非同心圆，不好掌握圆心位置，圆大小，不好理解
+    function drawTwo() {
+      ctxTwo.save();
+      ctxTwo.lineWidth = 10;
+      let gr = ctxTwo.createRadialGradient(50, 50, 25, 100, 100, 100);
+      gr.addColorStop(0, 'red');
+      gr.addColorStop(1, 'green');
+      ctxTwo.strokeStyle = gr;
+      
+      ctxTwo.beginPath();
+      ctxTwo.arc(100, 100, 50, 145 * Math.PI/180, 405 * Math.PI/180, false);
+      ctxTwo.stroke();
+
+      ctxTwo.restore();
+      let grTwo = ctxTwo.createRadialGradient(50, 250, 25, 100, 300, 100);
+      grTwo.addColorStop(0, 'red');
+      grTwo.addColorStop(1, 'green');      
+      ctxTwo.fillStyle = grTwo;
+      ctxTwo.fillRect(0, 200, 200, 200);     
+    }
+    drawTwo();
+
+  </script>
+</body>
+</html>

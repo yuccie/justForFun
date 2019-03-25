@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>基于时间的动画</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <script src="./js/lib/jquery-3.3.1.min.js"></script>
+  <style>
+    .container {
+      width: 300px;
+      height: 150px;
+    }
+  </style>  
+</head>
+<body>
+  <div class="container">
+    <canvas id="canvas" width="300" height="150" ></canvas>
+  </div>
+
+  <div class="container">
+    <canvas id="canvasTwo" width="300" height="150" ></canvas>
+  </div>
+  <script>
+    $(function(){
+      var dpr = window.devicePixelRatio;
+      // 振幅
+      var amplitValue = 20;
+      // 角速度
+      var angleSpeed = 0.02;
+      // 初始位置
+      var initPos = 0;
+      // 移动速度
+      var vValue = 0.12;
+      // 当前位置
+      var currentPos = initPos;
+
+      var canvasDom = $('#canvas')[0];
+      var ctx = canvasDom.getContext('2d');
+
+      $(canvasDom).css('width', canvasDom.width);
+      $(canvasDom).css('height', canvasDom.height);
+      canvasDom.width = canvasDom.width * dpr;
+      canvasDom.height = canvasDom.height * dpr;
+      ctx.scale(dpr, dpr);
+      
+      // 由于渲染的耗时因此造成性能不好的手机看时会比较慢
+      function draw() {
+        ctx.save();
+        ctx.clearRect(0, 0, canvasDom.width, canvasDom.height);
+        ctx.translate(0, canvasDom.height / 2 / dpr);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        var yPos;
+        for (var i = 0; i < canvasDom.width; i++) {
+          yPos = -amplitValue * Math.sin(angleSpeed * i - currentPos);
+          ctx.lineTo(i, yPos);
+        }
+        ctx.stroke();
+        currentPos = currentPos + vValue;
+        ctx.restore();
+
+        window.requestAnimationFrame(draw);
+      }
+
+      window.requestAnimationFrame(draw);
+
+
+      // 基于时间的动画
+      var canvasDomTwo = $('#canvasTwo')[0];
+      var ctxTwo = canvasDomTwo.getContext('2d');
+
+      // 解决模糊问题
+      $(canvasDomTwo).css('width', canvasDomTwo.width);
+      $(canvasDomTwo).css('height', canvasDomTwo.height);
+      canvasDomTwo.width = canvasDomTwo.width * dpr;
+      canvasDomTwo.height = canvasDomTwo.height * dpr;
+      ctxTwo.scale(dpr, dpr); 
+      
+      var duration = 80000;
+      var startTime = new Date();
+      function drawTwo() {
+        var nowTime = new Date();
+        var currentDuration = nowTime - startTime;
+        // 当前应该在的位置
+        var twoCurrentPos = currentDuration * (canvas.width / duration);
+        ctxTwo.save();
+        ctxTwo.clearRect(0, 0, canvasDom.width, canvasDom.height);
+        ctxTwo.translate(0, canvasDom.height / 2 / dpr);
+        ctxTwo.beginPath();
+        ctxTwo.moveTo(0, 0);
+        var yPos;
+        for (var i = 0; i < canvasDom.width; i++) {
+          yPos = -amplitValue * Math.sin(angleSpeed * i - twoCurrentPos);
+          ctxTwo.lineTo(i, yPos);
+        }
+        ctxTwo.stroke();
+        ctxTwo.restore();
+     
+        window.requestAnimationFrame(drawTwo);
+      }
+
+      window.requestAnimationFrame(drawTwo);      
+      
+    });
+
+  </script>
+</body>
+</html>

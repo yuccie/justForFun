@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>requestAnimationFrame的好处</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <script src="./js/lib/jquery-3.3.1.min.js"></script>
+  <style>
+    #square{
+      height: 100px;
+      width: 100px;
+      position: absolute;
+      left: 0;
+      top: 20px;
+      background: red;
+    }
+    #second{
+      height: 100px;
+      width: 100px;
+      position: absolute;
+      left: 0;
+      top: 140px;
+      background: red;
+    }
+    #third {
+      height: 100px;
+      width: 100px;
+      position: absolute;
+      left: 0;
+      top: 260px;
+      background: red;      
+    } 
+    #fourth {
+      height: 100px;
+      width: 100px;
+      position: absolute;
+      left: 0;
+      top: 380px;
+      background: red;      
+    }        
+  </style>
+</head>
+<body>
+  <div id='square'></div>
+  <div id="second"></div>
+  <div id="third"></div>
+  <div id="fourth"></div>
+  <script>
+    $(function(){
+
+      // 演示3秒之内利用requestAnimationFrame的帧率
+      // 和是否每次渲染
+      let start;
+      let firstCount = 0;
+      let lastProgress = 0;
+      function step() {
+        let progress = new Date() - start;
+        firstCount++;
+        let firstDuration = progress - lastProgress;
+        lastProgress = progress;
+        // for (let k = 0; k < 100; k++ ) {
+        //   let $tmp = $('<div></div>');
+        //   $('body').append($tmp);
+        //   $tmp.remove();
+        // }                
+        $('#square').css('transform', `translateX(${firstCount * 10}px)`);     
+        if (progress < 3000) {
+          requestAnimationFrame(step);
+        }
+      }
+      $('#square').on('click', function(){
+        start = new Date();
+        requestAnimationFrame(step);
+      });
+      
+      // 利用setTimeout递归调用，但将dom渲染的时间减掉，使下次开始的时间提前
+      // 展示出帧率也为60fps
+      let secondCount = 0;
+      let secondStart;
+      function secondAnimation() {
+        let progress = new Date() - secondStart;
+        secondCount++;
+        // for (let k = 0; k < 100; k++ ) {
+        //   let $tmp = $('<div></div>');
+        //   $('body').append($tmp);
+        //   $tmp.remove();
+        // }        
+        $('#second').css('transform', `translateX(${secondCount * 10}px)`);
+        if (progress < 3000) {
+          let interval = 1000/60 * secondCount - (new Date() - secondStart);
+          console.log('interval', interval.toFixed(2));
+          console.log('secondCount', secondCount);
+          setTimeout(() => {
+            secondAnimation();
+          }, interval);
+        }
+      }
+      
+      $('#second').on('click', function(){
+        secondStart = new Date();
+        secondAnimation();
+      });
+      
+      // 直接setTimeout 执行完后再隔1000/60 ms调用，帧率要低于60fps
+      let thirdStart;
+      let thirdCount = 0;
+      function thirdAnimation() {
+        let progress = new Date() - thirdStart;
+        thirdCount++;
+        // for (let k = 0; k < 100; k++ ) {
+        //   let $tmp = $('<div></div>');
+        //   $('body').append($tmp);
+        //   $tmp.remove();
+        // }
+        $('#third').css('transform', `translateX(${thirdCount * 10}px)`);
+        if (progress < 3000) {
+          setTimeout(() => {
+            thirdAnimation();
+          }, 1000/60);
+        }
+      }
+      $('#third').on('click', function(){
+        thirdStart = new Date();
+        thirdAnimation();
+      })
+      
+      // setInterval 每隔1000/60 ms调用
+      let fourthStart;
+      let intervalProgress;
+      let currentCount = 0;
+      function fourthAnimation() {
+        intervalProgress = new Date() - fourthStart;
+        currentCount++;
+        $('#fourth').css('transform', `translateX(${currentCount * 10}px)`);
+      }
+
+      $('#fourth').on('click', function(){
+        fourthStart = new Date();
+        let intervalTask = setInterval(() => {
+          if (intervalProgress >= 3000) {
+            clearInterval(intervalTask);
+          }
+          fourthAnimation();
+        }, 1000/60);
+      });
+      
+      
+      // setInterval回调不执行伪代码
+      // $('#third').on('click', function(){
+      //   // 其它代码执行了5ms
+      //   // 其它操作
+      
+      //   setInterval(() => {
+      //     // 花305ms执行
+      //     fn()
+      //   }, 200);
+
+      //   // 花300ms执行
+      //   // 其它耗时操作
+
+
+      //   // 因其它耗时任务，直到305ms才将任务放入
+      //   // 执行栈，即305毫秒才开始执行第一次任务，因为setInterval会在
+      //   // 405ms、605ms处往事件队列里放任务，但因第一次任务要运行到610ms，因此在放第三次timer任务时，由于
+      //   // 尚有第二次的任务未执行，故这次任务不会放入队列中，从而造成少执行任务的问题。
+      // });
+
+
+      // 暂时不看 想证明事件队列的多任务性 但并不能证明
+      // $('#third').on('click', function(){
+      //   for (let k = 0; k < 50000; k++ ) {
+      //     let $tmp = $('<div></div>');
+      //     $('body').append($tmp);
+      //     $tmp.remove();
+      //   }
+      // });
+    });
+  </script>
+</body>
+</html>
