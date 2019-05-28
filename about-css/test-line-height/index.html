@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .dib-baseline {
+        display: inline-block;
+        width: 150px;
+        height: 150px;
+        border: 1px solid #cad5eb;
+        background-color: #f0f3f9;
+        line-height: 0;
+      }
+      .test1, .test2 {
+        font-size: 16px;
+        line-height: 0;
+        border: 1px solid #ccc;
+        background: #eee;
+        margin-bottom: 50px;
+      }
+      .test2 {
+        font-size: 0;
+        line-height: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <span class="dib-baseline"></span>
+    <span class="dib-baseline">x-baseline</span>
+
+    <div class="test1">我的高度是？</div>
+    <div class="test2">我的高度是？</div>
+  </body>
+</html>
