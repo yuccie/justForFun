@@ -1,0 +1,87 @@
+<div class="box">
+  <div class="dropzone">
+    <div id="draggable" draggable="true" ondragstart="event.dataTransfer.setData('text/plain',null)">
+      This div is draggable
+    </div>
+  </div>
+  <div class="dropzone"></div>
+  <div class="dropzone"></div>
+  <div class="dropzone"></div>
+</div>
+
+
+<style>
+  /* .box {
+    float: left;
+  } */
+
+  #draggable {
+    width: 1200px;
+    height: 20px;
+    text-align: center;
+    background: white;
+  }
+
+  .dropzone {
+    width: 1200px;
+    height: 20px;
+    background: blueviolet;
+    margin-bottom: 10px;
+    padding: 10px;
+    float: left;
+  }
+</style>
+
+<script>
+  var dragged;
+
+  /* 拖动目标元素时触发drag事件 */
+  document.addEventListener( "drag", function ( event ) {
+    dragged.parentNode.parentNode.removeChild( dragged.parentNode );
+  }, false );
+
+  document.addEventListener( "dragstart", function ( event ) {
+    // 保存拖动元素的引用(ref.)
+    dragged = event.target;
+    // 使其半透明
+    event.target.style.opacity = .5;
+  }, false );
+
+  document.addEventListener( "dragend", function ( event ) {
+    // 重置透明度
+    event.target.style.opacity = "";
+  }, false );
+
+  /* 放置目标元素时触发事件 */
+  document.addEventListener( "dragover", function ( event ) {
+    // 阻止默认动作以启用drop
+    event.preventDefault();
+  }, false );
+
+  document.addEventListener( "dragenter", function ( event ) {
+    // 当可拖动的元素进入可放置的目标时高亮目标节点
+    if ( event.target.className == "dropzone" ) {
+      event.target.style.background = "purple";
+    }
+
+  }, false );
+
+  document.addEventListener( "dragleave", function ( event ) {
+    // 当拖动元素离开可放置目标节点，重置其背景
+    if ( event.target.className == "dropzone" ) {
+      event.target.style.background = "";
+    }
+
+  }, false );
+
+  document.addEventListener( "drop", function ( event ) {
+    // 阻止默认动作（如打开一些元素的链接）
+    event.preventDefault();
+    // 将拖动的元素到所选择的放置目标节点中
+    if ( event.target.className == "dropzone" ) {
+      event.target.style.background = "";
+      event.target.appendChild( dragged );
+    }
+
+  }, false );
+</script>
