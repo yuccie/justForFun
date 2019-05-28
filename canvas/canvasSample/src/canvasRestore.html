@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>restore save示例</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <script src="./js/lib/jquery-3.3.1.min.js"></script>
+  <style>
+    .container {
+      height: 600px;
+      width: 600px;
+      border: 1px solid #000;
+    }
+    #canvas {
+      border: 1px solid #f00;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <canvas id="canvas" height="600" width="600"></canvas>
+  </div>
+  <script>
+    $(function(){
+      function drawScreen() {
+        let dom = $('#canvas')[0];
+        let ctx = dom.getContext('2d'); 
+
+        ctx.fillStyle = 'black';
+        ctx.fillRect(10, 10, 200, 200);
+        // 保存当前填充色为黑色
+        ctx.save();
+
+        ctx.beginPath();
+        // 截取50*50像素的方框
+        ctx.rect(0, 0, 50, 50);
+        ctx.clip();
+
+        ctx.beginPath();
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 5;
+        // 因为目前画布仅有50*50像素宽高，故仅显示一条红色弧线
+        ctx.arc(100, 100, 100, 0, (Math.PI/180)*360, false);
+        ctx.stroke();
+        ctx.closePath();
+        
+        // 出栈绘制状态到 200*200像素宽的黑色方框
+        //ctx.restore();
+
+        ctx.beginPath();
+        // 画布宽高比较大
+        ctx.rect(0, 0, 500, 500);
+        ctx.clip();
+
+        ctx.beginPath();
+        ctx.strokeStyle = 'blue';
+        ctx.lineWidth = 5;
+        // 可完整展示蓝色圆圈
+        ctx.arc(100, 100, 50, 0, (Math.PI/180)*360, false);
+        ctx.stroke();
+        ctx.closePath();
+      }
+
+      drawScreen();
+    });
+  </script>
+</body>
+</html>

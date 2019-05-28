@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>画布宽高</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <style>
+    #canvasTwo {
+      border: 1px solid #f00;
+      height: 100%;
+      width: 100%;
+    }
+
+    #canvasThree {
+      border: 1px solid #f00;
+      height: 100%;
+      width: 100%;
+    }
+
+    #canvasFourth {
+      border: 1px solid #f00;
+    }        
+  </style>
+  <script src="./js/lib/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <canvas id="canvas" height="100%" width="100%"></canvas>
+  </div>
+
+  <div class="container">
+    <canvas id="canvasTwo"></canvas>
+  </div>
+
+  <div class="container">
+    <canvas id="canvasThree" width="600" height="300"></canvas>
+  </div>  
+
+  <div class="container">
+    <canvas id="canvasFourth" width="300" height="150"></canvas>
+  </div>
+  
+  <div class="container">
+    <canvas id="canvasFifth" width="600" height="300" style="width: 300px; height: 150px; border: 1px solid #f00;"></canvas>
+  </div>  
+  
+  <script>
+  /**
+   * 画布像素为实际绘制区域的
+   * 
+  */
+  $(function(){
+    // 不设置画布宽高，默认宽高为300X150
+    // 但展示宽高为600X300，所以展示的效果为放大了两倍
+    let canvasTwoDom = $('#canvasTwo')[0];
+    let ctxTwo = canvasTwoDom.getContext('2d');
+    
+    function drawTwo() {
+      //ctxTwo.scale(0.5, 0.5);
+      ctxTwo.lineWidth = 2;
+      ctxTwo.beginPath();
+      ctxTwo.moveTo(10, 10);
+      ctxTwo.lineTo(50, 50);
+      ctxTwo.stroke();
+    }
+    drawTwo();
+    
+
+    // 画布宽高跟展示宽高一致 都是600X300 
+    let canvasThreeDom = $('#canvasThree')[0];
+    let ctxThree = canvasThreeDom.getContext('2d');
+    
+    function drawThree() {
+      ctxThree.lineWidth = 2;
+      ctxThree.beginPath();
+      ctxThree.moveTo(10, 10);
+      ctxThree.lineTo(50, 50);
+      ctxThree.stroke();
+    }
+    drawThree();
+    
+    // 画布宽高、展示宽高300X150 但放大绘图上下文两倍
+    // 结果 线不模糊
+    let canvasFourthDom = $('#canvasFourth')[0];
+    let ctxFourth = canvasFourthDom.getContext('2d');
+    
+    function drawFourth() {
+      ctxFourth.lineWidth = 2;
+      ctxFourth.scale(2, 2);
+      ctxFourth.beginPath();
+      ctxFourth.moveTo(10, 10);
+      ctxFourth.lineTo(50, 50);
+      ctxFourth.stroke();
+    }
+    drawFourth();
+    
+    // 画布宽高600X300,展示宽高300X150
+    // 结果 线缩小了一倍
+    let canvasFifthDom = $('#canvasFifth')[0];
+    let ctxFifth = canvasFifthDom.getContext('2d');
+    
+    function drawFifth() {
+      ctxFifth.lineWidth = 2;
+      ctxFifth.scale(2, 2);
+      ctxFifth.beginPath();
+      ctxFifth.moveTo(280, 130);
+      ctxFifth.lineTo(330, 180);
+      ctxFifth.stroke();
+    }
+    drawFifth();    
+  });    
+  </script>
+
+</body>
+</html>

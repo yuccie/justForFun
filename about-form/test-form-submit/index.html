@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    p{
+      line-height: 40px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 注意地址栏变化，key就相当于键名，即使回车也会触发提交事件 -->
+  <!-- input默认是type是text类型，form表单提交默认是get -->
+  <!-- 即使没有submit类型的input，回车也会触发form的submit -->
+  <form>
+    <input name="key">
+    <input type="submit" value="点我提交表单">
+  </form>
+
+  <p >-------------------我是分割线-----------------</p>
+  <!-- 还可以直接在定义key和value，然后提交，观察地址栏 -->
+  <!-- 作为按钮的input控件同时被当做一个表单输入提交给了服务器。 
+    它到底是交互控件还是数据控件呢？定位是有些不清晰。
+    再加上它的样式难以定制、不可作为其他标签的容器， 
+    所以建议不要用input作为表单提交按钮。 
+  -->
+  <form>
+    <input name="key">
+    <input type="submit" name="key1" value="ok">
+  </form>
+
+
+  <p >-------------------我是分割线-----------------</p>
+  <!-- action的值是url，规定当提交表单时向何处发送表单数据 
+    button不但可以提交，还可以设置reset类型
+  -->
+  <form action="form_action.asp" method="get">
+      First name: <input type="text" name="fname" />
+      Last name: <input type="text" name="lname" />
+      <button type="submit" value="Submit">Submit</button>
+      <button type="reset" value="Reset">Reset</button>
+  </form>
+
+  <p >-------------------我是分割线-----------------</p>
+  <!-- enter键提交表单
+    HTML2.0 标准里规定：
+    When there is only one single-line text input field in a form, 
+    the user agent should accept Enter in that field as a request to submit the form.
+    当表单中只有一个单行的文本输入控件时，用户代理应当接受回车键来提交表单。
+
+    但很多浏览器实现上，都多个单行的文本输入也可以用enter提交。
+    这里要注意，单行的文本输入控件是type为text的，而不是textarea
+
+    当然也可以阻止，只需onsubmit="return false"
+  -->
+  <form onsubmit="return false;">
+    <input name='key'>
+    <input value='ok' type='submit'>
+  </form>
+
+  <p >-------------------我是分割线-----------------</p>
+
+  <!-- 双引号里面的代码可以视为表达式，因此也支持函数 -->
+  <form onsubmit="return allowSubmit();">
+    <input name='key'>
+    <input value='ok' type='submit'>
+  </form>
+
+
+  <script>
+    function allowSubmit(val){
+      if(true){
+        return false
+      }
+    }
+  </script>
+</body>
+</html>

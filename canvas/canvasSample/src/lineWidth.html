@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>线宽精度问题</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <script src="./js/lib/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <canvas id="canvas" width="600" height="300" ></canvas>
+  </div>
+  <script>
+    let canvasDom = $('#canvas')[0];
+    let ctx = canvasDom.getContext('2d');
+
+    function draw() {
+
+      // 寄偶数线宽对斜线的影响？（无影响）
+      // 没有调整过的斜线 奇数线宽
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(10, 1);
+      ctx.lineTo(40, 31);
+      ctx.stroke();
+      
+      // 调整过的斜线 奇数线宽
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(10.5, 32);
+      ctx.lineTo(40.5, 62);
+      ctx.stroke();
+      
+      // 奇数线宽对竖线的影响？（需+0.5）
+      // 没有调整过的竖线 奇数线宽
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(10, 100);
+      ctx.lineTo(10, 130);
+      ctx.stroke();
+      
+      // 调整过的竖线 奇数线宽
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(10.5, 131);
+      ctx.lineTo(10.5, 161);
+      ctx.stroke(); 
+      
+      // 奇数线宽对横线的影响？(需+0.5)
+      // 没有调整过的横线 奇数线宽
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(100, 100);
+      ctx.lineTo(130, 100);
+      ctx.stroke();
+      
+      // 调整过的横线 奇数线宽
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(131, 100.5);
+      ctx.lineTo(161, 100.5);
+      ctx.stroke();      
+      
+      // 偶数线宽对斜线的影响？ (无影响)
+      // 没有+0.5的斜线 偶数线宽
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(50, 1);
+      ctx.lineTo(80, 31);
+      ctx.stroke();
+      
+      // +0.5的斜线 偶数线宽
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(50.5, 32);
+      ctx.lineTo(80.5, 62);
+      ctx.stroke();
+      
+      // 偶数线宽对竖线影响？(无影响)
+      // 没有+0.5的竖线 偶数线宽
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(50, 100);
+      ctx.lineTo(50, 130);
+      ctx.stroke();
+      
+      // +0.5的竖线 偶数线宽
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(50.5, 131);
+      ctx.lineTo(50.5, 161);
+      ctx.stroke();
+      
+      // 线宽为3 +0.5的调整是否有效？
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(100, 150);
+      ctx.lineTo(130, 150);
+      ctx.stroke();
+      
+      // 调整过的横线 奇数线宽
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(131, 150.5);
+      ctx.lineTo(161, 150.5);
+      ctx.stroke(); 
+    }
+
+    draw();
+  </script>
+</body>
+</html>

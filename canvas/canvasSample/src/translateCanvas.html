@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>辅助理解为何translate时还要除去dpr</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <script src="./js/lib/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <canvas id="canvas" width="600" height="300" ></canvas>
+  </div>
+  <script>
+    var dpr = window.devicePixelRatio;
+    var canvasDom = $('#canvas')[0];
+    var ctx = canvasDom.getContext('2d');
+
+    $(canvasDom).css('width', canvasDom.width);
+    $(canvasDom).css('height', canvasDom.height);
+    canvasDom.width = canvasDom.width * dpr;
+    canvasDom.height = canvasDom.height * dpr;
+    ctx.scale(dpr, dpr);
+
+    function draw() {
+      ctx.translate(0, canvasDom.height / 2 / dpr);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'green';
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0.5);
+      ctx.lineTo(100, 0.5);
+      ctx.stroke();
+
+    }
+
+    draw();
+  </script>
+</body>
+</html>

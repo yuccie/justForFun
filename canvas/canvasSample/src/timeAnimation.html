@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>requestAnimationFrame兼容方法的问题</title>
+</head>
+<body>
+  <script>
+    // 张鑫旭的requestAnimationFrame兼容写法并不是完全一样
+    (function() {
+        var lastTime = 0;
+        var vendors = ['webkit', 'moz'];
+        for(var x = 0; x < vendors.length && !window.requestAnFrame; ++x) {
+            window.requestAnFrame = window[vendors[x] + 'RequestAnFrame'];
+            window.cancelAnFrame = window[vendors[x] + 'CancelAnFrame'] ||    // name has changed in Webkit
+                                          window[vendors[x] + 'CancelRequestAnFrame'];
+        }
+
+        if (!window.requestAnFrame) {
+            window.requestAnFrame = function(callback, element) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
+                var id = window.setTimeout(function() {
+                    callback(currTime + timeToCall);
+                }, timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+        }
+        if (!window.cancelAnFrame) {
+            window.cancelAnFrame = function(id) {
+                clearTimeout(id);
+            };
+        }
+    }());    
+    const animation = timestamp => console.log('animation called at', timestamp)
+
+    window.requestAnimationFrame(animation)
+    window.requestAnimationFrame(animation)    
+    window.requestAnFrame(animation)
+    window.requestAnFrame(animation)     
+  </script>
+</body>
+</html>
