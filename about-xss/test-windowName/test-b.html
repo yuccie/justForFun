@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+  <script>
+    // 之所以可以拿到window.name，是因为window对象是浏览器的窗体，而并非document对象，因此为所有document对象所公用
+    // 另外就是window很多时候不受同源策略的限制，同时这个对象的值又没有什么特殊字符的限制，
+    // 因此攻击者可以利用这个对象，可以是实现跨域，跨页面传递数据。
+    // alert(`我拿到了test-a页面的窗口名字：${window.name} ${document.domain}`)
+
+    // 上面只是随便给window.name赋予一个值，那要是将cookie复制给window.name呢。。。
+    // eval函数可以接受一个字符串作为参数，并且执行(相当于字符串里是语句)，执行后就相当于，字符串里的语句就在该位置效果一样。。。有修改词法作用域的风险，修改词法作用域会导致性能下降
+    eval(name)
+  </script>
+</body>
+</html>

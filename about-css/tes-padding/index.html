@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    /* padding百分比值无论水平还是垂直方向都是相对于宽度计算的(因为大多数height都为0，根据height没什么用) 
+      利用padding百分比可以实现自适应的等比例矩形效果
+      如：div{ padding: 50% } 就是正方形
+      如：div{ padding: 25% 50% } 就是宽高比2:1的矩形效果
+      其实就是没有内容，利用padding填满盒子，因为div是块级，weight默认为横向100%
+    */
+    .square-padding{
+      padding: 25% 50%;
+      background: pink;
+    }
+
+    /* 因此可以利用上述原理，实现等比缩放图片，在任何设备上都看上去很协调
+        也就不会有限定高度那种方式带来的问题了
+     */
+    .box1{
+      padding: 25% 50%;
+      /* 当然还可以用一个方向的top值 */
+      /* padding-top: 50%; */
+      position: relative;
+    }
+    .img1{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 内联元素的padding规则有些不规则，待研究 */
+    .box2{
+      border: 1px dashed goldenrod;
+      margin: 50px;
+    }
+    .span2{
+      padding: 50%;
+      background: gray;
+      /* font-size: 0; */
+    }
+
+
+  </style>
+
+</head>
+<body>
+  <div class="square-padding"></div>
+
+  <div class="box1">
+    <img class="img1" src="./imgs/test-percentage-padding.png">
+  </div>
+
+  <!-- 内联元素的padding -->
+  <div class="box2">
+    <span class="span2">dddddddd</span>
+  </div>
+
+
+  
+</body>
+</html>

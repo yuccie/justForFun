@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+  <style>
+    /* 参考css选择器：http://www.w3school.com.cn/cssref/css_selectors.asp */
+    /* p:lang(it)	选择带有以 "it" 开头的 lang 属性值的每个 <p> 元素。 */
+    :lang(ch)>q {
+      quotes: '“''”';
+    }
+
+    :lang(en)>q {
+      quotes: '"''"';
+    }
+
+    :lang(no)>q {
+      quotes: '«''»';
+    }
+
+    q:before {
+      content: open-quote;
+    }
+
+    q:after {
+      content: close-quote;
+    }
+
+    /* 这是分割线 */
+
+    .ask {
+      quotes: '提问：“''”';
+    }
+
+    .answer {
+      quotes: '回答：“''”';
+    }
+
+    .ask:before,
+    .answer:before {
+      content: open-quote;
+    }
+
+    .ask:after,
+    .answer:after {
+      content: close-quote;
+    }
+
+
+    a + a::before{
+      content: '';
+      padding: 10px 3px 1px;
+      border-left: 1px solid gray;
+      margin-left: 6px;
+      font-size: 0;
+    }
+
+
+    h3 {
+    line-height: 30px;
+    font-size: 14px;
+    }
+    h3 > span {
+    padding-top: 58px;
+    } 
+  </style>
+</head>
+
+<body>
+  <!-- 锚点定位需要一个a标签，否则直接在url上加#id无法跳转过去 -->
+  <a href="#hash">点击跳转到锚点</a>
+
+  <p lang="ch"><q>这本书很䎎！</q></p>
+  <p lang="en"><q>This book is very good!</q></p>
+  <p lang="no"><q>denne bog er fantastisk!</q></p>
+
+  <div style="height:50px;background:#ccc;text-align: center;line-height: 50px;">这是分割线</div>
+
+  <p class="ask">为什么 open-quote/close-quote 很少使用？</p>
+  <p class="answer">因为ⴤ接使用字符更干脆！</p> 
+
+
+  <div style="height:5000px;background:#ccc;text-align: center;line-height: 50px;">这是分割线</div>
+
+  <!-- 利用伪元素生成管道符 -->
+  <a href="">登录</a><a href="">注册</a> 
+
+
+
+  <h3><span id="hash">标题</span></h3>
+
+  <div style="height:5000px;background:#ccc;text-align: center;line-height: 50px;">这是分割线</div>
+
+</body>
+
+</html>

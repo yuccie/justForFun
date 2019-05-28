@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="t"></div>
+  <input type="text" id="text" value="">
+  <input type="button" id="s" value="write" onclick="test()">
+  <script>
+    function test(){
+      let str = document.getElementById('text').value 
+      // 这是将输入的内容当做a的href,这样单击就会发送数据
+      document.getElementById('t').innerHTML = `<a href=${str}>testLink</a>`
+
+      // 还可以执行脚本
+      document.getElementById('t').innerHTML = `<a onclick=alert('你可能被攻击了')>testLink</a>`
+
+    }  
+  </script>
+</body>
+</html>

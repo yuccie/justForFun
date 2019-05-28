@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    div {
+      border: 1px solid pink;
+    }
+
+    span {
+      padding: 25%;
+      /* ：内联元素的垂直padding 会让幽灵
+        节点”显现，也就是规范中的“strut”出现。
+        知道了原因，要解ߣ此问题就简单了。由于内联元素默认的
+        高度完全受font-size 大小᧗制，因此，我们只要： font-size: 0;
+        就可以让生成的元素为正方形
+      */
+      font-size: 0;
+      background: gray;
+    }
+
+    .icon-menu {
+      display: inline-block;
+      width: 140px;
+      height: 10px;
+      padding: 35px 0;
+      border-top: 10px solid;
+      border-bottom: 10px solid;
+      background-color: currentColor;
+      background-clip: content-box;
+    }
+
+    .icon-dot {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      padding: 10px;
+      border: 10px solid;
+      border-radius: 50%;
+      background-color: currentColor;
+      background-clip: content-box;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <span></span>
+  </div>
+
+
+  <i class="icon-menu"></i>
+  <i class="icon-dot"></i>
+
+
+
+</body>
+
+</html>

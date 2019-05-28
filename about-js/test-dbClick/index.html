@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>判断单击or双击</title>
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <input type="button" onclick="aa()" ondblclick="bb()" value="点我">
+  <script type="text/javascript">
+    var timer = null;
+    function aa() {
+      console.log('event.detail', event.detail, event)
+      clearTimeout( timer );
+      if ( event.detail == 2 )
+        return;
+      timer = setTimeout( function () {
+        console.log( '单击' );
+      }, 300 );
+    }
+    function bb() {
+      clearTimeout( timer );
+      console.log( '双击' );
+    }
+  </script>
+</body>
+
+</html>
