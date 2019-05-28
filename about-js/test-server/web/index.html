@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function addURLParam(url,name,value){
+      url += (url.indexOf("?") == 1 ? "?" : "&");
+      url += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+      return url;
+    }
+
+    const xhr = new XMLHttpRequest()
+    const url = 'http://172.16.91.164:3010/hello/李润泽'
+
+
+    xhr.onreadystatechange = function () {
+      if ( xhr.readyState == 4 ) { 
+        if ( ( xhr.status >= 200 && xhr.status < 300 ) || xhr.status == 304 ) { 
+          document.write(xhr.responseText)
+        } else { 
+          document.write(xhr.status, Object.keys(xhr))
+        }
+      }
+    };
+
+    xhr.onprogress = function (e) {
+      console.log('请求对象',e)
+    }
+
+    xhr.open( "get", url  , false );
+    console.log(`开始发送请求时间：${Date.now()}`)
+    xhr.send( null );
+
+    console.log( `同步代码执行时间：${Date.now()}` )
+
+  </script>
+</body>
+
+</html>
