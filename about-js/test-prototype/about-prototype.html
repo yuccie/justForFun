@@ -19,7 +19,7 @@
       person.age = 29;
       person.job = "Software Engineer";
       person.sayName = function() {
-        alert(this.name);
+        console(this.name);
       };
 
       person.sayName();
@@ -31,7 +31,7 @@
         age: 29,
         job: "Software Engineer",
         sayName: function() {
-          alert(this.name);
+          console(this.name);
         }
       };
 
@@ -67,7 +67,7 @@
       });
 
       book.year = 2005;
-      alert(book.edition); //2
+      console(book.edition); //2
 
       // 同时定义多个属性
       var book = {};
@@ -94,7 +94,7 @@
       });
 
       book.year = 2005;
-      // alert(book.edition); //2
+      // console(book.edition); //2
 
       // 读取数据属性的特性
       Object.getOwnPropertyDescriptor(book, "_year");
@@ -114,7 +114,7 @@
         o.age = age;
         o.job = job;
         o.sayName = function() {
-          alert(this.name);
+          console(this.name);
         };
         return o;
       }
@@ -135,7 +135,7 @@
         this.age = age;
         this.job = job;
         this.sayName = function() {
-          alert(this.name);
+          console(this.name);
         };
       }
 
@@ -151,16 +151,16 @@
       person2.sayName(); //"Greg"
 
       // 用instanceof检测对象类型
-      alert(person1 instanceof Object); //true
-      alert(person1 instanceof Person); //true
-      alert(person2 instanceof Object); //true
-      alert(person2 instanceof Person); //true
+      console(person1 instanceof Object); //true
+      console(person1 instanceof Person); //true
+      console(person2 instanceof Object); //true
+      console(person2 instanceof Person); //true
 
       // constructor属性最初就是用来标识对象类型的，比如此处的Person
       // 创建自定义的构造函数意味着将来可以将它的实例标示为一种特定的类型
       // 而这正是构造函数胜过工厂模式的地方
-      alert(person1.constructor == Person); //true
-      alert(person2.constructor == Person); //true
+      console(person1.constructor == Person); //true
+      console(person2.constructor == Person); //true
 
       // 构造函数与其他函数的唯一区别，就在于调用它们的方式不同。
       // 不过，构造函数毕竟也是函数，不存在定义构造函数的特殊语法。
@@ -174,7 +174,7 @@
         this.name = name;
         this.age = age;
         this.job = job;
-        this.sayName = new Function("alert(this.name)");
+        this.sayName = new Function("console(this.name)");
       }
 
       // 可以这样定义，以解决问题，但有全局污染的问题
@@ -186,13 +186,13 @@
       }
 
       function sayName() {
-        alert(this.name);
+        console(this.name);
       }
 
       var person1 = new Person("Nicholas", 29, "Software Engineer");
       var person2 = new Person("Greg", 27, "Doctor");
 
-      alert(person1.sayName == person2.sayName); //true
+      console(person1.sayName == person2.sayName); //true
 
       // 发展历程五
       // 构造函数模式的问题，如上，为了解决这个问题，可以通过原型模式
@@ -205,7 +205,7 @@
       Person.prototype.age = 29;
       Person.prototype.job = "Software Engineer";
       Person.prototype.sayName = function() {
-        alert(this.name);
+        console(this.name);
       };
 
       var person1 = new Person();
@@ -215,17 +215,17 @@
       person2.sayName(); //"Nicholas"
 
       // 新对象具有相同的属性和方法
-      alert(person1.sayName == person2.sayName); //true
+      console(person1.sayName == person2.sayName); //true
 
       // 可以通过isPrototypeOf来确定原型与实例是否有关系
-      alert(Person.prototype.isPrototypeOf(person1)); //true
-      alert(Person.prototype.isPrototypeOf(person2)); //true
+      console(Person.prototype.isPrototypeOf(person1)); //true
+      console(Person.prototype.isPrototypeOf(person2)); //true
 
       // ES 5新增方法Object.getPrototypeOf()，返回原型
       //only works if Object.getPrototypeOf() is available
       if (Object.getPrototypeOf) {
-        alert(Object.getPrototypeOf(person1) == Person.prototype); //true
-        alert(Object.getPrototypeOf(person1).name); //"Nicholas"
+        console(Object.getPrototypeOf(person1) == Person.prototype); //true
+        console(Object.getPrototypeOf(person1).name); //"Nicholas"
       }
 
       // 每当代码读取某个对象的某个属性时，都会执行一次搜索，目标是具有给定名字的属性。
@@ -270,17 +270,17 @@
         age: 29,
         job: "Software Engineer",
         sayName: function() {
-          alert(this.name);
+          console(this.name);
         }
       };
 
       var friend = new Person();
 
-      alert(friend instanceof Object); //true
-      alert(friend instanceof Person); //true
+      console(friend instanceof Object); //true
+      console(friend instanceof Person); //true
       // 注意，此处重写了Person.prototype，导致constructor属性不再指向Person了。
-      alert(friend.constructor == Person); //false
-      alert(friend.constructor == Object); //true
+      console(friend.constructor == Person); //false
+      console(friend.constructor == Object); //true
 
       // 分析：
       // 每创建一个函数，就会同时创建它的prototype对象，这个对象也会自动获得constructor属性。
@@ -314,7 +314,7 @@
         age: 29,
         job: "Software Engineer",
         sayName: function() {
-          alert(this.name);
+          console(this.name);
         }
       };
 
@@ -336,7 +336,7 @@
         job: "Software Engineer",
         friends: ["Shelby", "Court"],
         sayName: function() {
-          alert(this.name);
+          console(this.name);
         }
       };
 
@@ -347,13 +347,13 @@
       person1.friends.push("Van");
 
       // 基本类型都是新开辟空间
-      alert(person1.name); // "I am person1"
-      alert(person2.name); // "Nicholas"
+      console(person1.name); // "I am person1"
+      console(person2.name); // "Nicholas"
       // 注意因为是引用类型，则指向相同。
-      alert(person1.friends); //"Shelby,Court,Van"
-      alert(person2.friends); //"Shelby,Court,Van"
-      alert(person1.friends === person2.friends); //true
-      alert(person1.sayName === person2.sayName); //true
+      console(person1.friends); //"Shelby,Court,Van"
+      console(person2.friends); //"Shelby,Court,Van"
+      console(person1.friends === person2.friends); //true
+      console(person1.sayName === person2.sayName); //true
 
       // 发展历程七
       // 原型模式的问题如上，可以组合使用使用构造函数模式和原型模式
@@ -368,7 +368,7 @@
       Person.prototype = {
         constructor: Person,
         sayName: function() {
-          alert(this.name);
+          console(this.name);
         }
       };
 
@@ -377,10 +377,10 @@
 
       person1.friends.push("Van");
 
-      alert(person1.friends); //"Shelby,Court,Van"
-      alert(person2.friends); //"Shelby,Court"
-      alert(person1.friends === person2.friends); //false
-      alert(person1.sayName === person2.sayName); //true
+      console(person1.friends); //"Shelby,Court,Van"
+      console(person2.friends); //"Shelby,Court"
+      console(person1.friends === person2.friends); //false
+      console(person1.sayName === person2.sayName); //true
 
       // 后续发展：动态原型模式
       // 该模式有条件的初始化原型上的方法，而且都写在了构造函数里
@@ -393,7 +393,7 @@
         //methods
         if (typeof this.sayName !== "function") {
           Person.prototype.sayName = function() {
-            alert(this.name);
+            console(this.name);
           };
         }
       }
@@ -410,7 +410,7 @@
         o.age = age;
         o.job = job;
         o.sayName = function() {
-          alert(this.name);
+          console(this.name);
         };
         return o;
       }
@@ -442,9 +442,9 @@
       }
 
       var colors = new SpecialArray("red", "blue", "green");
-      alert(colors.toPipedString()); // "red|blue|green"
+      console(colors.toPipedString()); // "red|blue|green"
 
-      alert(colors instanceof SpecialArray);
+      console(colors instanceof SpecialArray);
       // 在这个函数内部，首先创建了一个数组，
       // 然后push()方法（用构造函数接收到的所有参数）初始化了数组的值。
       // 随后，又给数组实例添加了一个toPipedString()方法，该方法返回以竖线分割的数组值。
