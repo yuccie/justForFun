@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+  <script>
+    function testNaN(){
+      console.log(window.isNaN('aa')) // true
+      console.log(window.isNaN(NaN))  // true
+      console.log(Number.isNaN('aa')) // false
+      console.log(Number.isNaN(NaN))  // true
+    }
+    testNaN()
+
+    // 从 ES6 开始我们可以使用工具函数 Number.isNaN(..)。ES6 之前的浏览器的 polyfill 如下:
+    if(!Number.isNaN){
+      Number.isNaN = function (n){
+        return typeof n === 'number'
+          && window.isNaN(n)
+      }
+    }
+
+    // 利用 NaN 不等于自身这个特点。NaN 是 JavaScript 中唯 一一个不等于自身的值。
+    if(!Number.isNaN){
+      Number.isNaN = function (n){
+        return n !== n
+      }
+    }
+  </script>
+</body>
+</html>

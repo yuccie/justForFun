@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+      .table {
+          display: table;
+          width: 100%;
+          width: calc(100% - 30px);
+          max-width: 400px;
+          margin: auto;
+          table-layout: fixed;
+          text-align: left;
+      }
+      .td {
+          display: table-cell;
+          padding: 5px;
+      }
+      
+      input[type="checkbox"] {
+          position: absolute;
+          /* clip 属性定义了元素的哪一部分是可见的。clip 属性只适用于 position:absolute 的元素。 */
+          /* 默认值是不裁剪，下面的话相当于把整个input给剪掉了 */
+          /* clip: rect(0 0 0 0); */
+          clip-path: circle(0);
+      }
+      .check-in,
+      .check-out {
+          color: #34538b;
+          cursor: pointer;
+      }
+      .check-out {
+          display: none;
+      }
+      :checked ~ .check-out {
+          display: inline-block;
+      }
+      :checked ~ .check-in {
+          display: none;
+      }
+      
+      .element {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s;
+      }
+      :checked ~ .element {
+        max-height: 666px;
+      }
+</style>      
+</head>
+<body>
+    <div class="demo">     
+      <div class="table">
+          <div class="td">
+              <input id="check1" type="checkbox">
+              <p>个人觉得，display:table-cell最强的应用是可以任意个数列表的等宽效果。</p>
+              <div class="element">
+              <p>display:table-cell其他一些应用，例如，两栏自适应布局，垂直居中效果等等都是可以通过其他技术手段模拟出来的，但是，根据列表个数自动等宽的效果，其他CSS是很难模拟的，尤其当需要兼容IE8浏览器的时候。</p>
+              </div>
+              <label for="check1" class="check-in">更多↓</label>
+              <label for="check1" class="check-out">收起↑</label>
+          </div>
+          <div class="td">
+              <input id="check2" type="checkbox">
+              <p>个人觉得，display:table-cell最强的应用是可以任意个数列表的等宽效果。</p>
+              <div class="element">
+              <p>display:table-cell其他一些应用，例如，两栏自适应布局，垂直居中效果等等都是可以通过其他技术手段模拟出来的，但是，根据列表个数自动等宽的效果，其他CSS是很难模拟的，尤其当需要兼容IE8浏览器的时候。</p>
+              <p>然而，此方法也有局限性，就是只能实现单行列表的等分，所以，如果我们希望列表数目超过一定值的时候变成多行，就需要根据数目不同，输出不同的DOM结构，仅仅靠CSS有难度。</p>
+              </div>
+              <label for="check2" class="check-in">更多↓</label>
+              <label for="check2" class="check-out">收起↑</label>
+          </div>
+      </div>
+    </div>
+
+</body>
+</html>

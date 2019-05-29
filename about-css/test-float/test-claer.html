@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      li {
+        width: 10px;
+        height: 10px;
+        margin: 5px;
+        float: right;
+        background: pink;
+        list-style: none;
+      }
+      li:nth-of-type(3) {
+        clear: right;
+      }
+
+      .father {
+        border: 1px solid #444;
+        overflow: hidden;
+      }
+      .father > img {
+        width: 60px;
+        height: 64px;
+        float: left;
+      }
+      .animal {
+        margin-left: 70px;
+      }
+      .clear {
+        clear: both;
+        height: 5px;
+        background: pink;
+      }
+
+
+      .icon-arrow {
+        display: inline-block;
+        width: 20px;
+        height: 1ex;
+        /* background: url(https://demo.cssworld.cn/images/5/arrow.svg) no-repeat center;
+        background-size: 100% 100%; */
+        background: url(https://demo.cssworld.cn/images/5/arrow.svg) no-repeat center;
+        background: url(https://demo.cssworld.cn/images/5/arrow.svg) no-repeat center/20px 20px;
+
+      }
+      .middle{
+        font-size: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+
+    <div class="father">
+      <img src="https://demo.cssworld.cn/images/common/l/zxx.jpg" />
+      <div class="animal">
+        小猫1，小猫2，
+        <div class="clear"></div>
+        小猫3，小猫4，小猫5，小猫6，小狗1，小狗2，小狗3，小狗4，小狗5，小狗6
+      </div>
+    </div>
+
+        
+    <div class="middle">
+        <i class="icon-arrow"></i>和文字中间对齐
+    </div>
+  </body>
+</html>

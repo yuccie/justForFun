@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .father {
+        width: 200px;
+      }
+      .father::after{
+        content: '';
+        display:block;
+        clear: both;
+      }
+      .float {
+        float: left;
+      }
+      .float img {
+        width: 128px;
+      }
+
+      .test-float{
+
+      }
+    </style>
+  </head>
+  <body>
+    <div class="father">
+      <div class="float">
+        <img src="https://demo.cssworld.cn/images/common/m/1.jpg" />
+        这是一大波文字，但宽度不会超过父元素
+      </div>
+      <div class="float">
+        <img src="https://demo.cssworld.cn/images/common/m/1.jpg" />
+        dhisoitqwotjptjpqwotp3ortp3qodsadfdf英文则会超过，因为有最小首选宽度
+      </div>
+    </div>
+
+    <div class="test-float">
+        <div>
+          <img src="https://demo.cssworld.cn/images/common/m/1.jpg" style="float:left">
+        </div>
+        <p class="animal">小狗1，小狗2，小狗2，小狗2，小狗2，小狗2，</p> 
+    </div>
+
+  </body>
+</html>
