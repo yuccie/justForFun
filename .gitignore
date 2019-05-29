@@ -4,3 +4,4 @@
 about-js/**/node_modules/
 canvas/**/node_modules/
 about-xss/**/node_modules/
+about-vue/**/node_modules/
