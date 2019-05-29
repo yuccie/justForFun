@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    ul{
+      list-style: none;
+    }
+  </style>
+</head>
+<body>
+  <ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+  </ul>
+
+  <script>
+    // 这是伪数组
+    var lis = document.getElementsByTagName('ul')[0].children
+
+// ---------------------------------
+    // 什么狗屁玩意一
+    // function myConsole(...val){
+    //   console.log('val', val);
+    //   val.forEach((item,indx,obj) => {
+    //     console.log('indx', indx)
+    //   })
+    // }
+    // myConsole(lis)
+    
+    function test(...val){
+      val.forEach((item, idx, obj) => {
+        console.log('idx', idx, val)
+      });
+    }
+    test(lis)          // 这样的话，又将伪数组整体当成数组的一项了
+    test(...lis);      // 应该这样传入，最后被合成数组了
+    
+// ---------------------------------
+    // 什么狗屁玩意二
+    // Array.prototype.call(lis).forEach((item,indx,obj) => {
+    //   console.log('indx', indx)
+    // })
+
+    // 伪数组，报错
+    // lis.forEach((item, idx, obj) => {
+    //   console.log('idx', idx)
+    // });
+
+    Array.prototype.slice.call(lis).forEach((item, idx, obj) => {
+      console.log('idx', idx)
+    });
+
+    // 还可以这样，就是对象调用数组上的方法，
+    Array.prototype.forEach.call(lis, (item, index, obj)=> {
+      console.log('index', index);
+    })
+
+    // 虽然是伪数组但是可以用forEach,而push，shift等等不能用
+    var lis1 = document.querySelectorAll('li');
+  
+    console.log( 'Array.isArray(lis1)' ,Array.isArray(lis1)); 
+    console.log( 'Array.isArray(Array.prototype.slice.call(lis1))' ,Array.isArray(Array.prototype.slice.call(lis1))); 
+
+    lis1.forEach((item, idx, obj) => {
+      console.log('idx', idx)
+    });
+
+    // 用slice可以将伪数组转为数组，可能是下面原理，也就是用直接赋值，伪数组有length和index访问等
+    function slice(obj) {
+      var arr =[];
+      var len = obj.length; // length 正好对应伪数组中的length属性
+      for(var i = 0;i < len;i++){
+        arr.push[i] = obj[i]; // i 正好对应伪数组中的索引值
+      }
+      return arr;
+    }
+
+// ---------------------------------
+
+    // 还可以利用用es6的Array.from
+    console.log('Array.isArray(lis)', Array.isArray(lis));
+    Array.from(lis).forEach((item, idx, obj) => {
+      console.log('Array.form idx', idx)
+    })
+
+    // ul.addEventListener('click', (e) => {
+    //   console.log(e.target, e)
+    // })
+  </script>
+</body>
+</html>
