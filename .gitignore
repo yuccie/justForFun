@@ -1,7 +1,3 @@
-.DS_Store
+**/.DS_Store
 **/node_modules/
-./**/package-lock.json
-about-js/**/node_modules/
-canvas/**/node_modules/
-about-xss/**/node_modules/
-about-vue/**/node_modules/
+**/package-lock.json
