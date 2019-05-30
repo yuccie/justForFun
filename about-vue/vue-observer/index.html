@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <button id='btn'>点我改变数据</button>
+
+  <script>
+
+    // demo1------------------
+    // 下面代码造成堆栈溢出，修改msg会一直触发监听器
+    // Object.defineProperty(window, 'msg', {
+    //   configurable: false,
+    //   enumerable: true,
+    //   get(){
+    //     return '我是初始数据';
+    //   },
+    //   set(val){
+    //     if(val === msg){
+    //       return;
+    //     }
+    //     msg = val;
+    //     cb();
+    //   }
+    // })
+
+    // document.getElementById('app').innerText = msg
+
+    // const btn = document.getElementById('btn');
+    // btn.addEventListener('click', () => {
+    //   msg = '改变后的数据';
+    // })
+
+
+    // demo2------------------
+    let obj = {
+      msg:'初始数据',
+    }
+
+    function reactive(obj,key,val){
+      console.log(33)
+      Object.defineProperty(obj, key, {
+        get(){
+          console.log(11)
+          return val;
+        },
+        set(newVal){
+          if(val === newVal){ return };
+          val = newVal;
+          cb()
+        }
+      })
+    }
+
+    // 参数一不能传null报错：called on non-object
+    // 为何只执行一次？函数执行两次，只是Object.defineProperty定义数据只有一次，后面的会将前面的覆盖
+    reactive(obj, 'msg', obj.msg);
+    reactive(obj, 'msg', 'e2233');
+
+    document.getElementById('app').innerText = obj.msg
+
+    const btn = document.getElementById('btn');
+    btn.addEventListener('click', () => {
+      obj.msg = '改变啦';
+      // 数据改变后还需要更新dom
+      document.getElementById('app').innerText = obj.msg
+    })
+
+    // demo3------------------
+    // let obj = {
+    //   _msg: '初始数据',
+    // }
+
+    // Object.defineProperty( obj, 'msg', {
+    //   get() {
+    //     console.log( 11 )
+    //     return obj._msg;
+    //   },
+    //   set( newVal ) {
+    //     if ( obj._msg === newVal ) { return };
+    //     obj._msg = newVal;
+    //     cb()
+    //   }
+    // } )
+
+    // document.getElementById( 'app' ).innerText = obj.msg
+
+    // const btn = document.getElementById( 'btn' );
+    // btn.addEventListener( 'click', () => {
+    //   obj.msg = '改变啦';
+    //   // 数据改变后还需要更新dom
+    //   document.getElementById( 'app' ).innerText = obj.msg
+
+    // } )
+    function cb() {
+      console.log( '视图更新啦' );
+    }
+
+  </script>
+</body>
+
+</html>
