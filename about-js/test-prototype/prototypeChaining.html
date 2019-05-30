@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <img src="./imgs/prototypeChain01.png" alt="">
+  <img src="./imgs/prototypeChain02.png" alt="">
+  <img src="./imgs/prototypeChain06.png" alt="">
+  <script>
+    // 继承的发展历程
+
+    // -----继承概念-----：
+    // 继承是OO语言中的一个最为人津津乐道的概念。
+    // 许多OO语言都支持两种继承方式：接口继承和实现继承。
+    // 接口继承只继承方法签名，而实现继承则继承实际的方法。
+    // 由于函数没有签名，在ECMAScript中无法实现接口继承。
+    // ECMAScript只支持实现继承，而且其实现继承主要是依靠原型链来实现的
+
+    // -----基本模式-----：
+    // 具体过程参考图6-4
+    function SuperType() {
+      this.property = true;
+    }
+
+    SuperType.prototype.getSuperValue = function () {
+      return this.property;
+    };
+
+    function SubType() {
+      this.subproperty = false;
+    }
+
+    //inherit from SuperType
+    SubType.prototype = new SuperType();
+
+    // 务必注意，给原型添加方法的代码一定要放在替换原型的语句之后
+    SubType.prototype.getSubValue = function () {
+      return this.subproperty;
+    };
+
+    var instance = new SubType();
+    // 分析过程
+    // 1. 先画出SuperType与SuperType.prototyp的关系图
+
+    // 2. 再画出SubType与SubType.prototype的关系图，
+    // 注意此时SubType.prototype是SuperType的实例，因此会继承来自SuperType及其原型的属性和方法，因为是实例，因此会有[[prototype]]
+
+    // 3. 由于原型的动态性，再在SubType.prototype上增加getSubValue方法
+
+    // 4. 再实例化SubType，则会直接继承subproperty属性，
+    // 通过__proto__可以访问property和getSubValue，
+    // 通过__proto__.__proto__可以访问getSuperValue
+
+    console.log( instance.subproperty ); // false
+    console.log( instance.property );    // true
+
+    console.log( instance.getSuperValue() );   //true
+
+    // 我们可以说instance是Object、SuperType或SubType中任何一个类型的实例
+    console.log( instance instanceof Object );      //true
+    console.log( instance instanceof SuperType );   //true
+    console.log( instance instanceof SubType );     //true
+
+    // 还可以
+    console.log( Object.prototype.isPrototypeOf( instance ) );    //true
+    console.log( SuperType.prototype.isPrototypeOf( instance ) ); //true
+    console.log( SubType.prototype.isPrototypeOf( instance ) );   //true
+    // 注意，此时instance.constructor(实例访问原型对象上属性)指向了SuperType，具体参考图6-4
+
+
+    // -----顶端的默认原型-----： 
+    // 所有引用类型默认都继承Object
+    // 务必记住：所有函数的默认原型都是Object的实例，而函数的默认原型都含有[[prototype]]
+    // 这也是为何自定义类型都会继承toString(),valueOf()等。
+    // 完整关系图参考6-5
+
+
+    // -----重写原型链-----：
+    // 即在通过原型链实现继承时，不能使用对象字面量创建原型方法。因为这样做就会重写原型链
+    function SuperType() {
+      this.property = true;
+    }
+
+    SuperType.prototype.getSuperValue = function () {
+      return this.property;
+    };
+
+    function SubType() {
+      this.subproperty = false;
+    }
+
+    //inherit from SuperType
+    SubType.prototype = new SuperType();
+
+    // 使用字面量添加新方法，会导致上一行代码无效
+    // 现在的原型包含的是一个Object的实例，而非SuperType的实例
+    SubType.prototype = {
+      getSubValue: function () {
+        return this.subproperty;
+      },
+
+      someOtherMethod: function () {
+        return false;
+      }
+    };
+
+    var instance = new SubType();
+    console.log( instance.getSuperValue() );   //error!
+
+    // -----含有引用类型值的原型问题-----：
+    // 1. 包含引用类型值的原型属性会被所有实例共享（因此应该在构造函数里定义引用类型属性）
+    // 2. 没有办法在不影响所有对象实例的情况下，给超类型的构造函数传递参数
+    function SuperType() {
+      this.colors = [ "red", "blue", "green" ];
+    }
+
+    function SubType() {
+    }
+
+    //inherit from SuperType
+    SubType.prototype = new SuperType();
+
+    var instance1 = new SubType();
+
+    instance1.colors.push( "black" );
+    console.log( instance1.colors );    //"red,blue,green,black"
+
+    var instance2 = new SubType();
+    console.log( instance2.colors );    //"red,blue,green,black"
+
+
+    // -----借用构造函数模式-----：
+    // 函数只不过是在特定环境中执行代码的对象，
+    // 因此通过使用apply()和call()方法也可以在（将来）新创建的对象上执行构造函数，
+    function SuperType() {
+      this.colors = [ "red", "blue", "green" ];
+    }
+
+    function SubType() {
+      // 实际上是在（未来将要）新创建的SubType实例的环境下调用了SuperType构造函数
+      SuperType.call( this );
+    }
+
+    var instance1 = new SubType();
+
+    instance1.colors.push( "black" );
+    alert( instance1.colors );        //"red,blue,green,black"
+
+    var instance2 = new SubType();
+    alert( instance2.colors );        //"red,blue,green"
+
+
+    // 还可以在子类构造器函数中向超类型构造函数传递参数。如下：
+    function SuperType( name ) {
+      this.name = name;
+    }
+
+    function SubType() {
+      // 继承了SuperType，还传递了参数
+      SuperType.call( this, "Nicholas" );
+
+      //instance property
+      this.age = 29;
+    }
+
+    var instance = new SubType();
+    alert( instance.name );    //"Nicholas";
+    alert( instance.age );     //29
+
+
+
+    // -----借用构造函数模式的问题-----：
+    // 1. 方法都在构造函数中定义，因此函数复用就无从谈起了。
+    // 2. 而且，在超类型的原型中定义的方法，对子类型而言也是不可见的，
+
+
+    // -----组合继承-----：
+    // 组合继承避免了原型链和借用构造函数的缺陷，融合了它们的优点，成为JavaScript中最常用的继承模式。
+    function SuperType( name ) {
+      this.name = name;
+      this.colors = [ "red", "blue", "green" ];
+    }
+
+    SuperType.prototype.sayName = function () {
+      alert( this.name );
+    };
+
+    function SubType( name, age ) {
+      SuperType.call( this, name );
+
+      this.age = age;
+    }
+
+    SubType.prototype = new SuperType();
+
+    SubType.prototype.sayAge = function () {
+      alert( this.age );
+    };
+
+    var instance1 = new SubType( "Nicholas", 29 );
+    instance1.colors.push( "black" );
+
+    alert( instance1.colors );  //"red,blue,green,black"
+    instance1.sayName();      //"Nicholas";
+    instance1.sayAge();       //29
+
+
+    var instance2 = new SubType( "Greg", 27 );
+    alert( instance2.colors );  //"red,blue,green"
+    instance2.sayName();      //"Greg";
+    instance2.sayAge();       //27
+
+
+    // -----原型式继承-----：
+    // 本质上object()对传入其中的对象执行了一次浅复制。
+    function object( o ) {
+      function F() { };
+      F.prototype = o;
+      return new F();
+    }
+
+    // 增加如下代码
+    var person = {
+      name: "Nicholas",
+      friends: [ "Shelby", "Court", "Van" ]
+    };
+
+    // 返回的这个新对象将person作为原型，
+    // 所以它的原型中就包含一个基本类型值属性和一个引用类型值属性。
+    var anotherPerson = object( person );
+    anotherPerson.name = "Greg";
+    anotherPerson.friends.push( "Rob" );
+
+    var yetAnotherPerson = object( person );
+    yetAnotherPerson.name = "Linda";
+    yetAnotherPerson.friends.push( "Barbie" );
+
+    alert( person.friends );   //"Shelby,Court,Van,Rob,Barbie"
+
+    // ECMAScript5通过新增Object.create()方法规范化了原型式继承。
+    // 这个方法接收两个参数：一个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象。
+    // 在传入一个参数的情况下，Object.create()与object()方法的行为相同。
+    // 其实说白了，就是将传进去的对象，作为新返回对象的原型而已
+    var person = {
+      name: "Nicholas",
+      friends: [ "Shelby", "Court", "Van" ]
+    };
+
+    var anotherPerson = Object.create( person );
+    anotherPerson.name = "Greg";
+    anotherPerson.friends.push( "Rob" );
+
+    var yetAnotherPerson = Object.create( person );
+    yetAnotherPerson.name = "Linda";
+    yetAnotherPerson.friends.push( "Barbie" );
+
+    alert( person.friends );   //"Shelby,Court,Van,Rob,Barbie"
+
+    // Object.create()参数二与Object.defineProperties()方法的第二个参数格式相同：
+    // 每个属性都是通过自己的描述符定义的。
+    var person = {
+      name: "Nicholas",
+      friends: [ "Shelby", "Court", "Van" ]
+    };
+
+    var anotherPerson = Object.create( person, {
+      name: {
+        value: "Greg"
+      }
+    } );
+
+    alert( anotherPerson.name );  //"Greg"
+
+
+    // -----寄生式继承-----：
+    // 寄生式继承的思路与寄生构造函数和工厂模式类似，
+    // 即创建一个仅用于封装继承过程的函数，
+    // 该函数在内部以某种方式来增强对象，
+    // 最后再像真地是它做了所有工作一样返回对象。
+    function createAnother( original ) {
+      var clone = object( original ); // 创建一个新对象
+      clone.sayHi = function () {    // 某种方式增强对象
+        console.log( 'hi' );
+      }
+      return clone;                 // 返回新对象
+    }
+
+    // -----组合式继承-----：
+    // 寄生式继承的缺点：为对象添加函数，会由于不能做到函数复用而降低效率
+    function SuperType( name ) {
+      this.name = name;
+      this.colors = [ "red", "blue", "green" ];
+    }
+
+    SuperType.prototype.sayName = function () {
+      alert( this.name );
+    };
+
+    function SubType( name, age ) {
+      SuperType.call( this, name );      // 第二次调用SuperType()
+
+      this.age = age;
+    }
+
+    SubType.prototype = new SuperType(); // 第一次调用SuperType()
+
+    var instance = new SubType( 'Nicholas', 29 );
+    // 分析过程：
+    // 1. 在第一次调用SuperType构造函数时，SubType.prototype会得到两个属性：name和colors；
+    // 2. 它们都是SuperType的实例属性，只不过现在位于SubType的原型中。
+    // 3. 当调用SubType构造函数时，又会调用一次SuperType构造函数，
+    // 4. 这一次又在新对象上创建了实例属性name和colors。于是，这两个属性就屏蔽了原型中的两个同名属性。
+    // 结果：有两组name和colors属性：一组在实例上，一组在SubType原型中。
+    // 具体参考图6-6
+
+
+    // -----寄生组合式继承-----：
+    // 即通过借用构造函数来继承属性，通过原型链的混成形式来继承方法。
+    // 其背后的基本思路是：不必为了指定子类型的原型而调用超类型的构造函数，
+    // 我们所需要的无非就是超类型原型的一个副本而已。
+    // 如下是一个基本模式
+    function inheritPrototype( subType, superType ) {
+      var prototype = object( superType.prototype );   //create object
+      prototype.constructor = subType;               //augment object
+      subType.prototype = prototype;                 //assign object
+    }
+    
+    // 整体写下来如下：
+    function object( o ) {
+      function F() { }
+      F.prototype = o;
+      return new F();
+    }
+
+    function inheritPrototype( subType, superType ) {
+      var prototype = object( superType.prototype ); // 创建对象
+      prototype.constructor = subType;               // 增强对象
+      subType.prototype = prototype;                 // 指定对象
+    }
+
+    function SuperType( name ) {
+      this.name = name;
+      this.colors = [ "red", "blue", "green" ];
+    }
+
+    SuperType.prototype.sayName = function () {
+      alert( this.name );
+    };
+
+    function SubType( name, age ) {
+      SuperType.call( this, name );
+
+      this.age = age;
+    }
+
+    inheritPrototype( SubType, SuperType );
+
+    SubType.prototype.sayAge = function () {
+      alert( this.age );
+    };
+
+    var instance1 = new SubType( "Nicholas", 29 );
+    instance1.colors.push( "black" );
+    alert( instance1.colors );  //"red,blue,green,black"
+    instance1.sayName();      //"Nicholas";
+    instance1.sayAge();       //29
+
+
+    var instance2 = new SubType( "Greg", 27 );
+    alert( instance2.colors );  //"red,blue,green"
+    instance2.sayName();      //"Greg";
+    instance2.sayAge();       //27
+    // 这个方案只调用了一次SuperType构造函数
+    // 并且因此避免了在SubType.prototype上面创建不必要的、多余的属性。
+    // 与此同时，原型链还能保持不变；因此，还能够正常使用instanceof和isPrototypeOf()。
+    // 开发人员普遍认为寄生组合式继承是引用类型最理想的继承范式。
+
+
+    // 总结
+    // ECMAScript支持面向对象（OO）编程，但不使用类或者接口。
+    // 对象可以在代码执行过程中创建和增强，因此具有动态性而非严格定义的实体。
+    // 在没有类的情况下，可以采用下列模式创建对象。
+    
+    // 工厂模式，
+    // 使用简单的函数创建对象，为对象添加属性和方法，然后返回对象。
+    // 这个模式后来被构造函数模式所取代。
+    
+    // 构造函数模式，
+    // 可以创建自定义引用类型，可以像创建内置对象实例一样使用new操作符。
+    // 不过，构造函数模式也有缺点，即它的每个成员都无法得到复用，包括函数。
+    // 由于函数可以不局限于任何对象（即与对象具有松散耦合的特点），因此没有理由不在多个对象间共享函数。
+    
+    // 原型模式，
+    // 使用构造函数的prototype属性来指定那些应该共享的属性和方法。
+    // 组合使用构造函数模式和原型模式时，使用构造函数定义实例属性，而使用原型定义共享的属性和方法。
+
+    // JavaScript主要通过原型链实现继承。
+    // 原型链的构建是通过将一个类型的实例赋值给另一个构造函数的原型实现的。
+    // 这样，子类型就能够访问超类型的所有属性和方法，这一点与基于类的继承很相似。
+    // 原型链的问题是对象实例共享所有继承的属性和方法，因此不适宜单独使用。
+    // 解决这个问题的技术是借用构造函数，即在子类型构造函数的内部调用超类型构造函数。
+    // 这样就可以做到每个实例都具有自己的属性，同时还能保证只使用构造函数模式来定义类型。
+    // 使用最多的继承模式是组合继承，这种模式使用原型链继承共享的属性和方法，而通过借用构造函数继承实例属性。
+    
+    // 此外，还存在下列可供选择的继承模式。
+
+    // 原型式继承，
+    // 可以在不必预先定义构造函数的情况下实现继承，其本质是执行对给定对象的浅复制。
+    // 而复制得到的副本还可以得到进一步改造。
+    
+    // 寄生式继承，
+    // 与原型式继承非常相似，也是基于某个对象或某些信息创建一个对象，然后增强对象，最后返回对象。
+    // 为了解决组合继承模式由于多次调用超类型构造函数而导致的低效率问题，可以将这个模式与组合继承一起使用。
+    
+    // 寄生组合式继承，
+    // 集寄生式继承和组合继承的优点与一身，是实现基于类型继承的最有效方式。
+
+  </script>
+</body>
+
+</html>
