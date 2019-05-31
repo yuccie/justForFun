@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>测试滚动穿透</title>
+    <style>
+      body {
+        /* 不然会抖动 */
+        margin: 0;
+      }
+      body.dialog-open {
+        position: fixed;
+        width: 100%;
+      }
+      #mask {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        background: #ccc;
+      }
+      p {
+        font-size: 40px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <button id="btn">打开弹窗</button>
+    <button id="btn1">利用js打开弹窗</button>
+    <button id="btn2">利用js关闭弹窗</button>
+    <div id="mask"></div>
+
+    <script>
+      var html = `<p>一行</p>`;
+      var p = document.createElement("p");
+      p.innerText = "一行";
+
+      // id不用获取，可以直接用
+      // var mask = document.getElementById("mask");
+      // var btn = document.getElementById("btn");
+      // var btn1 = document.getElementById("btn1");
+      // var btn2 = document.getElementById("btn2");
+
+      for (let i = 0; i < 50; i++) {
+        p.innerText = i + "行";
+        // 总是插入一个
+        document.body.insertBefore(p, btn);
+      }
+
+      btn.onclick = function() {
+        mask.style.display = "block";
+        // 在移动端都无效
+        document.body.style.overflow = "hidden";
+        document.documentElement.style.overflow = "hidden";
+      };
+      var scrollTop = 0;
+      btn1.onclick = function() {
+        // 在弹出层显示之前，记录当前的滚动位置
+        scrollTop = getScrollTop();
+
+        // 使body脱离文档流
+        document.body.classList.add("dialog-open");
+
+        // 把脱离文档流的body拉上去！否则页面会回到顶部！
+        document.body.style.top = -scrollTop + "px";
+
+        mask.style.display = "block";
+      };
+
+      // 隐藏弹出层
+      btn2.onclick = function() {
+        mask.style.display = "none";
+
+        // body又回到了文档流中（我胡汉三又回来啦！）
+        document.body.classList.remove("dialog-open");
+        console.log("scrollTop", scrollTop);
+        // 滚回到老地方
+        to(scrollTop);
+      };
+
+      function to(scrollTop) {
+        document.body.scrollTop = document.documentElement.scrollTop = scrollTop;
+      }
+      function getScrollTop() {
+        return document.body.scrollTop || document.documentElement.scrollTop;
+      }
+    </script>
+  </body>
+</html>
