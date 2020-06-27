@@ -1,0 +1,15 @@
+{
+  "name": "justForFun",
+  "version": "1.0.0",
+  "description": "<h1 align=\"center\"> <br>   <img src=\"https://raw.githubusercontent.com/thedaviddias/Front-End-Performance-Checklist/master/images/logo-front-end-performance-checklist.jpg\" alt=\"Front-End Performance Checklist\" width=\"170\">   <br>     <br>   前端性能清单   <br> </h1>",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

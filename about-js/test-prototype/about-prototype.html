@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <img src="./imgs/构造函数与原型.png" alt="" />
+    <img src="./imgs/重写原型对象后.png" alt="" />
+    <script>
+      // 创建对象发展历程
+
+      // 发展历程一
+      // 直接新建Object实例，然后挂载属性和方法
+      var person = new Object();
+      person.name = "Nicholas";
+      person.age = 29;
+      person.job = "Software Engineer";
+      person.sayName = function() {
+        console(this.name);
+      };
+
+      person.sayName();
+
+      // 发展历程二
+      // 对象字面量模式
+      var person = {
+        name: "Nicholas",
+        age: 29,
+        job: "Software Engineer",
+        sayName: function() {
+          console(this.name);
+        }
+      };
+
+      // -------数据属性和访问器属性---------
+      // 数据属性
+      var person = {};
+      Object.defineProperty(person, "name", {
+        configurable: false, // 不可删除
+        value: "Nicholas"
+      });
+
+      console.log(person.name); // "Nicholas"
+      delete person.name;
+      console.log(person.name); // "Nicholas"
+
+      // ----------------------------------
+      // 访问器属性
+      var book = {
+        _year: 2004,
+        edition: 1
+      };
+
+      Object.defineProperty(book, "year", {
+        get: function() {
+          return this._year;
+        },
+        set: function(newValue) {
+          if (newValue > 2004) {
+            this._year = newValue;
+            this.edition += newValue - 2004;
+          }
+        }
+      });
+
+      book.year = 2005;
+      console(book.edition); //2
+
+      // 同时定义多个属性
+      var book = {};
+      Object.defineProperties(book, {
+        _year: {
+          value: 2004
+        },
+        edition: {
+          value: 1
+        },
+
+        year: {
+          get: function() {
+            return this._year;
+          },
+
+          set: function(newValue) {
+            if (newValue > 2004) {
+              this._year = newValue;
+              this.edition += newValue - 2004;
+            }
+          }
+        }
+      });
+
+      book.year = 2005;
+      // console(book.edition); //2
+
+      // 读取数据属性的特性
+      Object.getOwnPropertyDescriptor(book, "_year");
+      // {value: 2004, writable: false, enumerable: false, configurable: false}
+
+      // 读取访问器属性的特性
+      Object.getOwnPropertyDescriptor(book, "year");
+      // {get: ƒ, set: ƒ, enumerable: false, configurable: false}
+
+      // 发展历程三
+      // Object构造函数和对象字面量方式缺点，每次都产生大量重复的代码
+      // 工厂模式
+      function createPerson(name, age, job) {
+        // 注意三点：新建Object对象，挂载，返回新创建的对象
+        var o = new Object();
+        o.name = name;
+        o.age = age;
+        o.job = job;
+        o.sayName = function() {
+          console(this.name);
+        };
+        return o;
+      }
+
+      var person1 = createPerson("Nicholas", 29, "Software Engineer");
+      var person2 = createPerson("Greg", 27, "Doctor");
+
+      person1.sayName(); //"Nicholas"
+      person2.sayName(); //"Greg"
+
+      // 发展历程四
+      // 工厂模式解决了创建多个相似对象的问题，
+      // 但没有解决新创建的对象属于哪一类的问题
+      // 构造函数模式
+      function Person(name, age, job) {
+        // 注意三点：没有显式创建对象，直接将属性和方法赋值给this对象，没有return语句
+        this.name = name;
+        this.age = age;
+        this.job = job;
+        this.sayName = function() {
+          console(this.name);
+        };
+      }
+
+      // 创建Person实例需要用new
+      // 1. 创建一个对象
+      // 2. 将构造函数的作用域赋给新对象(this就指向新对象)
+      // 3. 执行构造函数中的代码(为新对象添加属性)
+      // 4. 返回新对象
+      var person1 = new Person("Nicholas", 29, "Software Engineer");
+      var person2 = new Person("Greg", 27, "Doctor");
+
+      person1.sayName(); //"Nicholas"
+      person2.sayName(); //"Greg"
+
+      // 用instanceof检测对象类型
+      console(person1 instanceof Object); //true
+      console(person1 instanceof Person); //true
+      console(person2 instanceof Object); //true
+      console(person2 instanceof Person); //true
+
+      // constructor属性最初就是用来标识对象类型的，比如此处的Person
+      // 创建自定义的构造函数意味着将来可以将它的实例标示为一种特定的类型
+      // 而这正是构造函数胜过工厂模式的地方
+      console(person1.constructor == Person); //true
+      console(person2.constructor == Person); //true
+
+      // 构造函数与其他函数的唯一区别，就在于调用它们的方式不同。
+      // 不过，构造函数毕竟也是函数，不存在定义构造函数的特殊语法。
+      // 任何函数，只要通过new操作符来调用，那它就可以作为构造函数；
+      // 而任何函数，如果不通过new操作符来调用，那它跟普通函数也不会有什么两样。
+
+      // 构造函数的问题
+      // 缺点：每个方法都要在实例上重新创建一遍，因为函数也是对象，因此相当于每次都实例化一个
+      // 和下面等价
+      function Person(name, age, job) {
+        this.name = name;
+        this.age = age;
+        this.job = job;
+        this.sayName = new Function("console(this.name)");
+      }
+
+      // 可以这样定义，以解决问题，但有全局污染的问题
+      function Person(name, age, job) {
+        this.name = name;
+        this.age = age;
+        this.job = job;
+        this.sayName = sayName;
+      }
+
+      function sayName() {
+        console(this.name);
+      }
+
+      var person1 = new Person("Nicholas", 29, "Software Engineer");
+      var person2 = new Person("Greg", 27, "Doctor");
+
+      console(person1.sayName == person2.sayName); //true
+
+      // 发展历程五
+      // 构造函数模式的问题，如上，为了解决这个问题，可以通过原型模式
+      // 原型模式
+      function Person() {}
+
+      // 我们创建的每个函数都有一个prototype(原型)属性，指向一个对象
+      // 而这个对象的用途就是包含特定类型的所有实例共享的属性和方法
+      Person.prototype.name = "Nicholas";
+      Person.prototype.age = 29;
+      Person.prototype.job = "Software Engineer";
+      Person.prototype.sayName = function() {
+        console(this.name);
+      };
+
+      var person1 = new Person();
+      person1.sayName(); //"Nicholas"
+
+      var person2 = new Person();
+      person2.sayName(); //"Nicholas"
+
+      // 新对象具有相同的属性和方法
+      console(person1.sayName == person2.sayName); //true
+
+      // 可以通过isPrototypeOf来确定原型与实例是否有关系
+      console(Person.prototype.isPrototypeOf(person1)); //true
+      console(Person.prototype.isPrototypeOf(person2)); //true
+
+      // ES 5新增方法Object.getPrototypeOf()，返回原型
+      //only works if Object.getPrototypeOf() is available
+      if (Object.getPrototypeOf) {
+        console(Object.getPrototypeOf(person1) == Person.prototype); //true
+        console(Object.getPrototypeOf(person1).name); //"Nicholas"
+      }
+
+      // 每当代码读取某个对象的某个属性时，都会执行一次搜索，目标是具有给定名字的属性。
+      // 搜索首先从对象实例本身开始。如果在实例中找到了具有给定名字的属性，则返回该属性的值；
+      // 如果没有找到，则继续搜索指针指向的原型对象，在原型对象中查找具有给定名字的属性。
+      // 如果在原型对象中找到了这个属性，则返回该属性的值。
+
+      // 不能通过对象实例重写原型中的值。实例中同名属性只是会屏蔽原型中的那个属性而已。
+      // 即使设置为null，但delete后，就可以再找到原型上的属性了
+
+      // hasOwnProperty()方法检测一个属性是否在实例还是原型中，
+      // 只在给定属性存在于对象实例中才返回true
+      // hasOwnProperty()方法继承之Object
+
+      // in操作符和for-in都可以遍历实例和原型中可枚举的属性和方法
+      // 如果实例中的属性和方法屏蔽了原型中的同名属性或方法，则可以遍历出，如下
+      var o = {
+        toString: function() {
+          return "My Object";
+        }
+      };
+      Object.defineProperty(o, "_name", {
+        value: "private",
+        enumerable: false
+      });
+
+      for (var prop in o) {
+        console.log(prop); // toString
+      }
+
+      // 要想取得所有实例属性，无论是否可枚举，可以用Object.getOwnPropertyNames()
+      Object.getOwnPropertyNames(o);
+      // ["toString", "_name"]
+
+      // 发展历程六
+      // 原型模式模式的问题，有点啰嗦，每次都得写Person.prototype
+      // 更简单的原型语法
+      function Person() {}
+
+      Person.prototype = {
+        name: "Nicholas",
+        age: 29,
+        job: "Software Engineer",
+        sayName: function() {
+          console(this.name);
+        }
+      };
+
+      var friend = new Person();
+
+      console(friend instanceof Object); //true
+      console(friend instanceof Person); //true
+      // 注意，此处重写了Person.prototype，导致constructor属性不再指向Person了。
+      console(friend.constructor == Person); //false
+      console(friend.constructor == Object); //true
+
+      // 分析：
+      // 每创建一个函数，就会同时创建它的prototype对象，这个对象也会自动获得constructor属性。
+      // 而我们在这里使用的语法，本质上完全重写了默认的prototype对象，
+      // 因此constructor属性也就变成了新对象的constructor属性（指向Object构造函数），不再指向Person函数。
+      // 此时，尽管instanceof操作符还能返回正确的结果，但通过constructor已经无法确定对象的类型了，
+
+      // 因此如果很需要对象类型的标识，可以增加如下
+      Person.prototype = {
+        // 注意，这样会导致原型的constructor可枚举，默认是不可枚举的
+        constructor: Person
+      };
+      // 因此可以如下
+      Object.defineProperty(Person.prototype, "constructor", {
+        enumerable: false,
+        value: Person
+      });
+
+      // 原型的动态性
+      // 尽管可以随时为原型添加属性和方法，并且修改能够立即在所有对象实例中反映出来，
+      // 但如果是重写整个原型对象，结果就会发生变化
+      // 调用构造函数时会为实例添加一个指向最初原型的[[Prototype]]指针，
+      // 而把原型修改为另外一个对象就等于切断了构造函数与最初原型之间的联系。
+      function Person() {}
+
+      var friend = new Person();
+
+      Person.prototype = {
+        constructor: Person,
+        name: "Nicholas",
+        age: 29,
+        job: "Software Engineer",
+        sayName: function() {
+          console(this.name);
+        }
+      };
+
+      friend.sayName(); //error
+      // 因为friend指向的原型中不包含以该名字命名的属性。
+      // 重写原型对象切断了现有原型与任何之前已经存在的对象实例之间的联系；
+      // 而已经存在的对象实例引用的仍然是最初的原型。
+      // 具体原因参考6-3图片
+
+      // 发展历程六的问题
+      // 更简单的原型语法虽然写着简单了，但是本质的共享问题依然存在
+      // 如果只是共享基本数据类型和方法倒也还行，但是如果共享引用数据类型则不好
+      function Person() {}
+
+      Person.prototype = {
+        constructor: Person,
+        name: "Nicholas",
+        age: 29,
+        job: "Software Engineer",
+        friends: ["Shelby", "Court"],
+        sayName: function() {
+          console(this.name);
+        }
+      };
+
+      var person1 = new Person();
+      var person2 = new Person();
+
+      person1.name = "I am person1";
+      person1.friends.push("Van");
+
+      // 基本类型都是新开辟空间
+      console(person1.name); // "I am person1"
+      console(person2.name); // "Nicholas"
+      // 注意因为是引用类型，则指向相同。
+      console(person1.friends); //"Shelby,Court,Van"
+      console(person2.friends); //"Shelby,Court,Van"
+      console(person1.friends === person2.friends); //true
+      console(person1.sayName === person2.sayName); //true
+
+      // 发展历程七
+      // 原型模式的问题如上，可以组合使用使用构造函数模式和原型模式
+      // 构造函数与原型组合模式(目前最佳模式)
+      function Person(name, age, job) {
+        this.name = name;
+        this.age = age;
+        this.job = job;
+        this.friends = ["Shelby", "Court"];
+      }
+
+      Person.prototype = {
+        constructor: Person,
+        sayName: function() {
+          console(this.name);
+        }
+      };
+
+      var person1 = new Person("Nicholas", 29, "Software Engineer");
+      var person2 = new Person("Greg", 27, "Doctor");
+
+      person1.friends.push("Van");
+
+      console(person1.friends); //"Shelby,Court,Van"
+      console(person2.friends); //"Shelby,Court"
+      console(person1.friends === person2.friends); //false
+      console(person1.sayName === person2.sayName); //true
+
+      // 后续发展：动态原型模式
+      // 该模式有条件的初始化原型上的方法，而且都写在了构造函数里
+      function Person(name, age, job) {
+        //properties
+        this.name = name;
+        this.age = age;
+        this.job = job;
+
+        //methods
+        if (typeof this.sayName !== "function") {
+          Person.prototype.sayName = function() {
+            console(this.name);
+          };
+        }
+      }
+
+      var friend = new Person("Nicholas", 29, "Software Engineer");
+      friend.sayName();
+      // 注意，仍然不要重写原型，理由前面说过
+
+      // 后续发展：寄生构造函数模式
+      // 思想：创建一个函数，封装创建的对象，返回创建的对象
+      function Person(name, age, job) {
+        var o = new Object();
+        o.name = name;
+        o.age = age;
+        o.job = job;
+        o.sayName = function() {
+          console(this.name);
+        };
+        return o;
+      }
+
+      var friend = new Person("Nicholas", 29, "Software Engineer");
+      friend.sayName(); //"Nicholas"
+      // 除了使用new操作符并把使用的包装函数叫做构造函数之外，
+      // 这个模式跟工厂模式其实是一模一样的。
+      // 构造函数在不返回值的情况下，默认会返回新对象实例。
+      // 而通过在构造函数的末尾添加一个return语句，可以重写调用构造函数时返回的值。
+
+      // 这个模式可以在特殊的情况下用来为对象创建构造函数。
+      // 假设我们想创建一个具有额外方法的特殊数组。
+      // 由于不能直接修改Array构造函数，因此可以使用这个模式。如下：
+      function SpecialArray() {
+        //create the array
+        var values = new Array();
+
+        //add the values
+        values.push.apply(values, arguments);
+
+        //assign the method
+        values.toPipedString = function() {
+          return this.join("|");
+        };
+
+        //return it
+        return values;
+      }
+
+      var colors = new SpecialArray("red", "blue", "green");
+      console(colors.toPipedString()); // "red|blue|green"
+
+      console(colors instanceof SpecialArray);
+      // 在这个函数内部，首先创建了一个数组，
+      // 然后push()方法（用构造函数接收到的所有参数）初始化了数组的值。
+      // 随后，又给数组实例添加了一个toPipedString()方法，该方法返回以竖线分割的数组值。
+      // 最后，将数组以函数值的形式返回。
+      // 注意：返回的对象与构造函数或者与构造函数的原型属性之间没有关系；
+    </script>
+  </body>
+</html>

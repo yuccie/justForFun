@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+  <style>
+    .box {
+      padding: 10px;
+      background-color: #cd0000;
+      text-align: center;
+    }
+    .content {
+      display: inline-block;
+      text-align: left;
+      background: pink;
+    }
+
+
+    .ao,
+    .tu {
+      display: inline-block;
+      width: 0;
+      font-size: 14px;
+      line-height: 18px;
+      margin: 35px;
+      color: #fff;
+    }
+    .ao:before,
+    .tu:before {
+      outline: 2px solid #cd0000;
+      font-family: Consolas, Monaco, monospace;
+    }
+    .ao:before {
+      content: "love你love";
+    }
+    .tu {
+      direction: rtl;
+    }
+    .tu:before {
+      content: "我love你";
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 页面某个模块的文字内容是动态的，可能是几个字，也可能是一句话。然
+后，希望文字少的时候居中显示，文字超过一行的时候居左显示。 -->
+  <div class="box">
+    <p id="conMore" class="content">文字内容</p>
+  </div>
+  <!-- 按钮 -->
+  <p><button id="btnMore">更多文字</button></p>
+
+  <!-- 测试换行 -->
+  <input type="button" value="这是input按钮这是input按钮这是input按钮这是input按钮这是input按这是input按钮这是input按钮这是input按钮钮这是input按钮这是input按钮这是input按钮">
+  <button>这是button按钮这是button按钮这是button按钮这是button按钮这是button按钮这是button按这是button按钮这是button按钮这是button按钮钮这是button按钮这是button按钮这是button按钮这是button按钮</button>
+  <p>inline-blockinline-blockinline-blockinline-block</p>
+  <p>内向内向内向内向内向内向</p>
+
+  <!-- 测试内部尺寸的首选最小宽度 -->
+  <!-- 利用连续英文单词不换行的特性，我们就可以控制什么地方“凹”，什么地方“凸”啦! -->
+  <span class="ao"></span>
+  <span class="tu"></span>
+
+
+  <!-- 非替换元素，设置block会具有流动性，也就是会撑满屏幕 -->
+  <span style="display:block;background:#cd0000;height:10px;"></span>
+  <!-- 替换元素，设置block仍然无法具有流动性 -->
+  <textarea style="display:block;background:pink;height:10px;"></textarea>
+
+
+  <!-- max-width会覆盖!important -->
+  <div style="background:blueviolet;height:10px;max-width: 200px;width: 400px!important"></div>
+  <!-- 二者冲突时，min-width会覆盖max-width -->
+  <div style="min-width:400px;max-width:300px;height:20px;background:gold;"></div>
+
+
+  <!-- 测试浮动与内联元素 -->
+  <div>
+    <span>这是span内联元素这是span内联元素这是是span内联元素这是spanspan内联元素这是span内联元素这是span内联元素这内联元素</span>
+    <div style="float:left;height: 30px;background: pink;width: 400px"></div> 
+  </div>
+
+  <!-- 测试浮动与内联元素 -->
+  <div style="background-color: #cd0000;"><span style="display:inline-block"></span></div>
+
+
+  <script>
+    
+      var btn = document.getElementById('btnMore'), 
+        content = document.getElementById('conMore');
+
+      if (btn && content) {
+        btn.onclick = function() {
+          content.innerHTML += '-新增文字';
+        };
+      }
+  </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body, p{
+      margin: 0;
+    }
+    .father {
+      width: 200px;
+    }
+
+    .float {
+      float: left;
+      background: pink;
+    }
+
+    .float img {
+      width: 128px;
+    }
+
+    /* span {
+      float: left;
+      width: 100px;
+      background: blueviolet;
+    } */
+    .span1{
+      float: left;
+      display: inline-table;
+      height: 50px;
+      background: pink;
+    }
+
+    .animal:first-line{
+      background: blue;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <div class="father">
+    <div class="float">
+      <img src="1.jpg">此时宽度依据文字首选最小宽度与图片的总和
+    </div>
+  </div> -->
+  <!-- <div style="text-align: left;background: pink;">
+    <span>这是文字</span>
+  </div> -->
+
+  <!-- <span class="span1">dddd</span> -->
+
+  <!-- 文字环绕图片 -->
+  <div class="father">
+    <img src="./img/test.jpg" style="float:left">
+  </div>
+  <p class="animal">这是文字，这是文字，这是文字，这是文字，这是文字，这是文字，...</p>
+
+</body>
+
+</html>

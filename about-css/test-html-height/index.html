@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .box{
+      background: pink;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="box">
+    <p>打开控制台查看</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+    <p>这是文字</p>
+  </div>
+
+  <script>
+    let box = document.querySelector('.box')
+    let boxHeight = window.getComputedStyle(box).height
+    console.log('box高度为：', boxHeight)
+  </script>
+</body>
+</html>

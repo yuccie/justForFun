@@ -1,0 +1,93 @@
+<head>
+  <title>切换tab requestAnimation</title>
+</head>
+
+<body cz-shortcut-listen="true" style="">
+    <h1>Animation example using requestAnimationFrame</h1>
+    
+    <p>
+      I'm a simple requestAnimationFrame example. Made by Flavio <a href="https://flaviocopes.com">flaviocopes.com</a>!
+    </p>
+    
+    <button id="start">
+      Start
+    </button>
+    
+    <button id="stop" style="visibility: hidden;">
+      Stop
+    </button>
+
+    <!-- include the Glitch button to show what the webpage is about and
+          to make it easier for folks to view source and remix -->
+    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"><button class="glitchButtonElement"><img alt="This is a Glitch app!" width="50px" src="https://cdn.glitch.com/3fd2e3a7-3145-4c1d-9480-32a2e6a6963a%2Flogo-day.svg?1490800908258"></button><div class="glitchOpenWindowElement" style="display: none;"><div class="project">
+          <div class="name">flavio-requestanimationframe-example</div>
+          <p class="description">A requestAnimationFrame example&nbsp;flaviocopes.com</p>
+          <div class="users">
+            <ul><li><a href="//glitch.com/@flaviocopes"><img width="25px" src="https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/d2374ff0-22a6-4d90-8f56-f8a4d12a0126-large.png" alt="avatar of flaviocopes">
+                    <span class="name">flaviocopes</span></a></li></ul>
+          </div>
+          <div class="footer"><a class="buttonLinks remix" href="https://glitch.com/edit/#!/remix/flavio-requestanimationframe-example">Remix on Glitch</a> <a class="buttonLinks viewCode" href="https://glitch.com/edit/#!/flavio-requestanimationframe-example">View Source</a></div>
+        </div> <span class="tooltip border"></span><span class="tooltip fill"></span></div></div>
+    <script src="https://button.glitch.me/button.js"></script>
+  
+
+<canvas width="256" height="256"></canvas>
+<script>
+// 切换tab页时，requestAnimationFrame的canvas渲染会丢失一些
+(() => {
+  let canvas
+  let context
+  let toggle
+  let request
+  
+  const start = document.getElementById('start')
+  const stop = document.getElementById('stop')
+  stop.style.visibility = 'hidden'
+
+  const init = () => {
+    canvas = document.createElement('canvas')
+    canvas.width = 256
+    canvas.height = 256
+
+    context = canvas.getContext('2d')
+
+    document.body.appendChild(canvas)
+  }
+
+  const animate = () => {
+    request = requestAnimationFrame(animate)
+    draw()
+  }
+
+  const draw = () => {
+    const time = Date.now() * 0.002
+    const x = Math.sin(time) * 100 + 128
+    const y = Math.cos(time * 0.42) * 100 + 128
+    toggle = !toggle
+
+    context.fillStyle = toggle ? '#EDAE49' : '#F4F1BB'
+    context.beginPath()
+    context.arc(x, y, 10, 0, Math.PI * 2, true)
+    context.closePath()
+    context.fill()
+  }
+
+  init()
+
+  start.addEventListener('click', () => {
+    animate()
+    stop.style.visibility = 'visible'
+    start.style.visibility = 'hidden'
+  })
+  stop.addEventListener('click', () => {
+    cancelAnimationFrame(request) //stop the animation
+    context.clearRect(0, 0, canvas.width, canvas.height) //clear the canvas
+    stop.style.visibility = 'hidden'
+    start.style.visibility = 'visible'
+  })
+
+  /* code built upon on an example from https://www.paulirish.com/2011/requestanimationframe-for-smart-animating/ */
+})()
+
+</script>
+</body>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <span class="test">{{egData}}</span>
+    <button @click="testNextTick">测试$nextTick</button>
+
+    <span class="test">{{obj.val}}</span>
+    <button @click="testForceUpdate">测试$forceUpdate</button>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          egData: 'old Message',
+          obj: {}
+        }
+      },
+      methods: {
+        testNextTick() {
+          this.egData = 'new Message'
+          // 理论上，修改了egData之后，第一次点击，下面获取的dom应该是新值，但是实际上还是old Message
+          // 这就是视图虽然更新了，但是真实的dom并没有更新。
+          console.log(document.querySelector('.test').innerHTML);
+
+          // 如果将获取dom的操作放在 $nextTick里，则第一次点击就会拿到更新后的dom，也就是 new Message
+          this.$nextTick(() => {
+            console.log('$nextTick', document.querySelector('.test').innerHTML);
+          });
+
+          // 总结：
+          // 1、要想获取更新后的dom，需要用$nextTick
+          // 2、如果在created里也想操作dom，也可以放在$nextTick，不然直接获取是没有dom的
+        },
+        
+
+
+        testForceUpdate() {
+          this.obj.val = 'hello forceUpdate';
+          // 迫使Vue实例重新（rander）渲染虚拟DOM，注意并不是重新加载组件。
+          // 结合vue的生命周期，调用$forceUpdate后只会触发beforeUpdate和updated这两个钩子函数，不会触发其他的钩子函数。
+          // 它仅仅影响实例本身和插入插槽内容的子组件，而不是所有子组件。
+          this.$forceUpdate();
+
+          // 总结：
+          // 1、当在data里没有显示的声明一个对象的属性，而是之后给该对象添加属性，这种情况vue是检测不到数据变化的，可以使用$forceUpdate()
+          // 2、但是这种做法并不推荐，官方说如果你现在的场景需要用forceUpdate方法 ,那么99%是你的操作有问题，如上data里不显示声明对象的属性，之后添加属性时正确的做法时用 vm.$set() 方法，所以forceUpdate请慎用
+        }
+      },
+
+      beforeCreate() { console.log('beforeCreate'); },
+      created() { console.log('created'); },
+      beforeMount() { console.log('beforeMount'); },
+      mounted() { console.log('mounted'); },
+      beforeUpdate() { console.log('beforeUpdate'); },
+      updated() { console.log('updated'); },
+      beforeDestroy() { console.log('beforeDestroy'); },
+      destroyed() { console.log('destroyed'); },
+    })
+  </script>
+</body>
+
+</html>

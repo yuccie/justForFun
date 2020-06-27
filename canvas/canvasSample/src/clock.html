@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>时钟</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <script src="./js/lib/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <canvas id="canvas" width="600" height="300"></canvas>
+  </div>
+  <script>
+    $(function(){
+      let canvasDom = $('#canvas')[0];
+      let ctx = canvasDom.getContext('2d');
+
+      function draw() {
+        // 空画布推入栈中
+        ctx.save();
+        ctx.clearRect(0, 0, canvasDom.width, canvasDom.height);
+        ctx.lineCap = 'round';        
+        // 原点移动中心点
+        ctx.translate(canvasDom.width / 2, canvasDom.height / 2);
+        ctx.beginPath();
+        // 绘制表盘
+        ctx.arc(0, 0, 100, 0, Math.PI * 2, false);
+        ctx.stroke();
+
+        // 小时刻度
+        ctx.save();
+        for (let i = 0; i < 12; i++) {
+          ctx.lineWidth = 5;
+          ctx.rotate(30 * Math.PI / 180);
+          ctx.beginPath();
+          ctx.moveTo(88, 0);
+          ctx.lineTo(98, 0);
+          ctx.stroke();
+        }
+        ctx.restore();
+        
+        // 分钟刻度
+        ctx.save();
+        ctx.lineWidth = 3;
+        for (let j = 0; j < 60; j++) {
+          if (j % 5 !== 0) {
+            ctx.beginPath();
+            ctx.moveTo(93, 0);
+            ctx.lineTo(98, 0);
+            ctx.stroke();
+          }
+          ctx.rotate(6 * Math.PI / 180);
+        }
+        ctx.restore();                    
+        
+        // 旋转坐标系到00:00:00
+        ctx.rotate(-90 * Math.PI / 180);
+
+        // 绘制时针
+        let now = new Date();
+        let hour = now.getHours();
+        hour = hour > 12 ? (hour - 12) : hour;
+        let hourRad = hour * 30 * Math.PI / 180;
+        let minutes = now.getMinutes();
+        // 60分钟跑30度 一分钟跑多少度
+        let minutesRad = minutes * 30 * Math.PI / 180 / 60;
+        let seconds = now.getSeconds();
+        // 3600秒跑30度 一秒跑多少度
+        let secondsRad = seconds * 30 * Math.PI / 180 / 3600;
+        let finalHourRad = hourRad + minutesRad + secondsRad;
+        
+        ctx.save();
+        ctx.rotate(finalHourRad);
+        ctx.lineWidth = 8;
+        
+        ctx.beginPath();
+        ctx.moveTo(-10, 0);
+        ctx.lineTo(20, 0);
+        ctx.stroke();
+        ctx.restore();
+
+        // 绘制分针
+        // 一分钟跑6度
+        let minutesM = minutes * 6 * Math.PI / 180;
+        let secondsM = seconds * 6 * Math.PI / 180 / 60;
+        let finalMinutes = minutesM + secondsM;
+
+        ctx.save();
+        ctx.rotate(finalMinutes);
+        ctx.lineWidth = 6;
+
+        ctx.beginPath();
+        ctx.moveTo(-15, 0);
+        ctx.lineTo(35, 0);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();        
+        
+        // 绘制秒针
+        let finalSeconds = seconds * 6 * Math.PI / 180;
+
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.rotate(finalSeconds);
+        ctx.lineWidth = 4;
+
+        ctx.beginPath();
+        ctx.moveTo(-25, 0);
+        ctx.lineTo(45, 0);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+        
+        //出栈到空画布 
+        ctx.restore();
+        requestAnimationFrame(draw);
+      }
+
+      requestAnimationFrame(draw);
+    });
+  </script>
+</body>
+</html>

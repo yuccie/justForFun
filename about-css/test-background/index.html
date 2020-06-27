@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+      }
+      #box {
+        margin: 100px;
+        width: 2000px;
+        height: 300px;
+        /* background: linear-gradient(#fb3 var(--p), red 0, #58a 50%, #ccc 0); */
+        /* background-size: 100% 100px; */
+
+        background: linear-gradient(
+          90deg,
+          #fb3 var(--p),
+          #58a 0,
+          #58a 50%,
+          yellowgreen 0,
+          yellowgreen 75%,
+          pink 0
+        );
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      }
+
+      /* #box:before {
+        content: attr(data-title);
+        position: absolute;
+        top: 100px;
+      } */
+    </style>
+  </head>
+  <body>
+    <!-- 利用html特性，每个标签都有一个title属性。当鼠标hover在该标签内容上时，
+      浏览器展示出该标签的title内容，让鼠标移走，内容消失， -->
+    <div id="box" title="我是鼠标悬停展示的内容"></div>
+
+    <script>
+      function mousePosition(ev) {
+        ev = ev || window.event;
+        if (ev.pageX || ev.pageY) {
+          return { x: ev.pageX, y: ev.pageY };
+        }
+        return {
+          x: ev.clientX + document.body.scrollLeft - document.body.clientLeft,
+          y: ev.clientY + document.body.scrollTop - document.body.clientTop
+        };
+      }
+      // 移入触发
+      document.documentElement.style.setProperty("--p", "40%");
+      box.addEventListener("mouseover", e => {
+        var mousePos = mousePosition(e);
+        console.log("mousePos.x", mousePos.x, mousePos.y);
+      });
+
+      // 移动时触发
+      box.addEventListener("mousemove", e => {
+        var mousePos = mousePosition(e);
+        console.log("mousePos.x", mousePos.x, mousePos.y);
+      });
+
+      //
+    </script>
+  </body>
+</html>

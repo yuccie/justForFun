@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .base {
+            width: 100px;
+            height: 100px;
+        }
+
+        .color-one {
+            background: red;
+            animation: colorOne 5s;
+        }
+
+        @keyframes colorOne {
+            from {
+                background: red;
+            }
+
+            to {
+                background: pink
+            }
+        }
+
+        @keyframes colorTwo {
+            0% {
+                background: red;
+            }
+
+            25% {
+                background: pink
+            }
+
+            75% {
+                background: blue;
+            }
+
+            100% {
+                background: yellow;
+            }
+        }
+
+        @keyframes myColor2 {
+            0% {
+                background: red;
+            }
+
+            25% {
+                background: pink
+            }
+
+            75% {
+                background: blue;
+            }
+
+            100% {
+                background: yellow;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // 多个script标签也是按模块进行执行，不会交叉执行(定时器除外)
+        // 最终打印1 3 4 5 6 s 2
+        var p = new Promise((resolve, reject) => {
+            console.log('1');
+            setTimeout(() => {
+                console.log('s');
+                Promise.resolve().then(() => {
+                    console.log(2);
+                })
+            })
+            // 如果不改变状态，then方法则不会执行
+            resolve()
+        })
+        console.log('3')
+        p.then(() => {
+            console.log('4')
+        })
+        p.then(() => {
+            console.log('5')
+        })
+    </script>
+
+    <script>
+        // 多个script标签加载，除了定时器，其他的代码也是按模块执行，
+        // 也就是前一个script执行完才会执行这个
+        console.log('6');
+        Promise.resolve().then(() => console.log(7))
+    </script>
+    <div class='color-one'></div>
+</body>
+
+</html>

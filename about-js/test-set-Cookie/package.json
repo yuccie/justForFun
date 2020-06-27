@@ -1,0 +1,16 @@
+{
+  "name": "test-set-cookie",
+  "version": "1.0.0",
+  "description": "",
+  "main": "expressServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.4"
+  }
+}

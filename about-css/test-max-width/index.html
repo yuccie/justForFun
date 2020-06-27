@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .img-box{
+      width: 800px;
+      animation: width 5s linear infinite alternate;
+    }
+    img{
+      max-width: 100%;
+      /* 下面一行代码没体现出来意义 */
+      height: auto!important;
+    }
+    @keyframes width {
+      from{width: 800px}
+      to{ width: 600px }
+    }
+  </style>
+</head>
+<body>
+  <div class="img-box">
+    <img src="./test-height.png" alt="闪电哥吃习西瓜的图片">
+  </div>
+  <p style="color:blue">img的height: auto!important; 感觉没有体现出意义？？？</p>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<head>
+  <title>小球运动及碰撞</title>
+</head>
+<canvas id="canvas" style="border: 1px solid" width="600" height="300"></canvas>
+
+<script>
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var raf;
+
+// 声明小球的当前x、y坐标，小球的速度在x轴上、y轴上的偏移量
+var ball = {
+  x: 100,
+  y: 100,
+  vx: 5,
+  vy: 2,
+  radius: 25,
+  color: 'blue',
+  draw: function() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+};
+
+// 下次绘制时，计算小球当前的x、y坐标
+// 根据小球的加速度系数在计算小球下次的速度在x、y轴上的偏移量
+function draw() {
+  ctx.clearRect(0,0, canvas.width, canvas.height);
+  ball.draw();
+  ball.x += ball.vx;
+  ball.y += ball.vy;
+  ball.vy *= .99;
+  ball.vy += .25;
+
+  // 碰撞的边界时改变小球的移动方向，即反向移动
+  if (ball.y + ball.vy > canvas.height ||
+      ball.y + ball.vy < 0) {
+    ball.vy = -ball.vy;
+  }
+  if (ball.x + ball.vx > canvas.width ||
+      ball.x + ball.vx < 0) {
+    ball.vx = -ball.vx;
+  }
+
+  raf = window.requestAnimationFrame(draw);
+}
+
+canvas.addEventListener('mouseover', function(e){
+  raf = window.requestAnimationFrame(draw);
+});
+
+canvas.addEventListener('mouseout', function(e){
+  window.cancelAnimationFrame(raf);
+});
+
+ball.draw();  
+</script>
+
