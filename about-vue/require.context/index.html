@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+
+    <p>{{ msg }}</p>
+
+    <div>
+      <button v-if="false" onclick="nativeBind()">原生绑定事件</button>
+      <button @click="clickMe">点击获取文件</button>
+    </div>
+
+  </div>
+
+
+  <script>
+    // 直接使用onclick绑定事件，是原生方式
+    function nativeBind() {
+      console.log('原生绑定事件');
+    }
+
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          msg: 'hello vue'
+        }
+      },
+      methods: {
+        clickMe() {
+          console.log('点击获取文件');
+          // require.context 可以遍历文件夹，加载指定的文件
+          // const requireComponent = require.context(
+          //   // 其组件目录的相对路径
+          //   './views',
+          //   // 是否查询其子目录
+          //   true,
+          //   // 匹配基础组件文件名的正则表达式
+          //   // /Base[A-Z]\w+\.(vue|js)$/
+          //   /.*?.vue$/
+          // )
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
