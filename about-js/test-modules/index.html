@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <script type="module">
+    // 参考：https://zh.javascript.info/import-export
+    // import.meta 对象包含关于当前模块的信息。
+    // type="module"模块脚本 总是 被延迟的，与 defer 特性相同。
+    // 旧时的浏览器不理解 type="module"。未知类型的脚本会被忽略。对此，我们可以使用 nomodule 特性来提供一个不兼容时的提示
+    console.log(import.meta)
+    // 模块，默认就是严格模式
+    // 在浏览器里使用module，必须声明type="module"
+    // 另外必须启动服务，本地文件访问不行
+    // 每个 <script type="module"> 也存在独立的顶级作用域
+    // 模块代码只执行一次。导出仅创建一次，然后会在导入之间共享。
+    import { sayHi } from './modulesOne.js'
+    sayHi();
+    // 优化器（optimizer）就会检测到它，并从打包好的代码中删除那些未被使用的函数，从而使构建更小。这就是所谓的“摇树（tree-shaking）
+
+    
+    // 静态导入
+    // import { default as User, sayHi } from './user.js'
+    
+    // 动态导入在常规脚本中工作时，它们不需要 script type="module".
+    // 尽管 import() 看起来像一个函数调用，但它只是一种特殊语法，只是恰好使用了括号（类似于 super()）。
+    // 因此，我们不能将 import 复制到一个变量中，或者对其使用 call/apply。因为它不是一个函数。
+    // 动态导入
+    async function dy() {
+      // let User = await import('./user.js');
+      // console.log(User, User.default, 'User')
+
+      let { default: User } = await import('./user.js');
+      console.log(User, 'User')
+    }
+
+    dy()
+
+
+  </script>
+</body>
+</html>
