@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手写vue原理</title>
+  </head>
+  <body>
+    <div id="app">
+      <h2>{{person.name}}</h2>
+      <div class="nameclass">{{msg}}</div>
+      <div v-text="msg"></div>
+      <div v-text="person.name"></div>
+
+      <div v-html="htmlStr"></div>
+      <div v-html="msg"></div>
+
+      <ul>
+        <li>1</li>
+        <li>1</li>
+        <li>1</li>
+        <li>1</li>
+      </ul>
+    
+      <input type="text" v-model="msg" />
+      <button v-on:click="handleClick">v-on:click</button>
+      <button @click="handleClick">@click</button>
+    </div>
+
+    <script
+      type="text/javascript"
+      src="https://static-as.missfresh.cn/frontend/vue/2.5.16/vue.min.js"
+    ></script>
+    <script>
+      /*
+        1、以上是利用框架直接渲染出来的，
+        2、如果自己写vue的话，需要解析html标签里的属性、指令、变量等，最后替换
+        3、所以首先要实现自己的Vue构造函数，构造函数里传入自己
+      
+      */
+      new Vue({
+        el: "#app",
+        data() {
+          return {
+            title: "hello",
+            person: {
+              name: "hello",
+              age: 18,
+              fav: "嘻嘻嘻嘻嘻嘻嘻嘻寻寻寻寻寻寻寻",
+            },
+            msg: "我是一个msg",
+            htmlStr: "<strong>我是加粗的strong</strong>",
+          };
+        },
+        methods: {
+          handleClick() {
+            console.log('this', this);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
