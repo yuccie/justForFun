@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+  <style>
+    body {
+      padding: 50px;
+    }
+    body > div{
+      width: 400px;
+      height: 100px;
+      background: pink;
+      resize: both;
+      overflow: auto;
+      /* transform: rotate(45deg); */
+      /* transform-origin: left bottom; */
+    }
+
+    /* 注意使用nth-child，h1是子元素，也是所有的子元素 */
+    body h1:nth-of-type(1) {
+      font-size: initial;
+      font-weight: initial;
+    }
+
+  </style>
+</head>
+<body>
+  <div>
+    <div>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, 
+        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat 
+        nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa 
+        qui officia deserunt mollit anim id est laborum
+    </div>
+
+  </div>
+
+  <h1>这是h1</h1>
+
+  <h1>这是h1，使用initial后，样式会变为ccs定义的样式，而不是浏览器厂商定义的样式</h1>
+</body>
+</html>

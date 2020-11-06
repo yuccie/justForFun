@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .con {
+      display: flex;
+    }
+    .box {
+      background: pink
+    }
+    .box:nth-child(1) {
+      flex: 1;
+      /* overflow: hidden; */
+      background: gold
+    }
+  </style>
+</head>
+<body>
+  <div class="con">
+    <div class="box">
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+    </div>
+    <div class="box">
+      <p>2</p>
+    </div>
+  </div>
+
+  <input type="text" name="name" value="xxx" disabled="true"/>
+  <input type="text" name="name" value="xxx" readonly="true"/>
+
+  <textarea rows="3" cols="40" id="te" onkeypress="back(this,event);"></textarea>
+
+  <script>
+    function back(el, event) {
+      const e = window.event || event
+      console.log(el, this);
+      if (e.keyCode === 13) {
+        e.returnValue = false;
+        el.value += '{{enter}}';
+        return false
+      }
+    }
+
+    function mySetInterval(fn, a, b) {
+      
+      return setInterval(fn, a)
+    }
+    
+  </script>
+</body>
+</html>
