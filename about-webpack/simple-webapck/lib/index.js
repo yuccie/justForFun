@@ -1,6 +1,5 @@
 // 文件构建到最后的输出
-import { Compiler } from './compiler.js';
-import { getAst } from './parser.js';
-
+const Compiler = require('./compiler');
+const WebpackConfig = require('../simpleWebpack.config');
 // 
-new Compiler();
+new Compiler(WebpackConfig).run();

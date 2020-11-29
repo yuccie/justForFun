@@ -3,6 +3,7 @@
 const fs = require('fs');
 const babylon = require('babylon');
 const traverse = require('babel-traverse').default;
+const { transformFromAst } = require('babel-core');
 
 
 // 用commonjs的语法写
@@ -28,5 +29,13 @@ module.exports = {
     });
 
     return deps;
+  },
+
+  // 将ast转换为源码，需要借助
+  transform: ast => {
+    const { code } = transformFromAst(ast, null,{
+      presets: ['env']
+    })
+    return code;
   }
 }

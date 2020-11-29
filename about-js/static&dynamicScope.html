@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    // ---函数防抖-------------------
+    // 函数防抖，短时间内频繁触发，不执行
+    function debounce(fn, interval = 300) {
+      return (...args) => {
+        clearTimeout(fn.timeId);
+        fn.timeId = setTimeout(() => {
+          fn.apply(this, args)
+        }, interval)
+      }
+    }
+    function log(e) {
+      console.log(`打印了window：`, e);
+    }
+
+    // window.addEventListener('resize', debounce(log))
+    // window.addEventListener('resize',e => {console.log(e)})
+
+
+
+    // ---函数节流-------------------
+    function throttle(fn, interval = 300) {
+      let canRun = true;
+      return (...args) => {
+        if (!canRun) return false;
+
+        canRun = false;
+        setTimeout(() => {
+          fn.apply(this, args)
+          canRun = true;
+        }, interval)
+      }
+    }
+
+    // window.addEventListener('resize', throttle(log))
+
+
+    // ---累加打印，每次是上次的2倍-------------------
+    function doubleThrottle(fn, interval = 300) {
+      let time = 1;
+      let canRun = true;
+
+      // 需要在上次的基础上累加，因此需要闭包
+      return (...args) => {
+        if (!canRun) return false;
+        canRun = false;
+        setTimeout(() => {
+          console.log('时间：', interval * time);
+          canRun = true;
+        }, interval * time);
+        time *= 2;
+      }
+    }
+    // 需要不停的触发才行，
+    // setInterval(doubleThrottle(log), 1000)
+    // window.addEventListener('resize', doubleThrottle(log))
+
+
+
+    // ---两数之和-------------------
+    let arr = [2,3,5,9];
+    function twoSum(arr, target) {
+      let map = {};
+      for (let item of arr) {
+        let restVal = target - item;
+        if (map[restVal] !== void 0) {
+          return [item, restVal]
+        } else {
+          // 把每个值都放进去
+          map[item] = item;
+        }
+      }
+      return [];
+    }
+    // console.log(twoSum(arr, 11));
+
+
+    // ---根据对象生成dom-------------------
+    let treeData = {
+      "Fish": {
+        "trout": {},
+        "salmon": {}
+      },
+
+      "Tree": {
+        "Huge": {
+          "sequoia": {},
+          "oak": {}
+        },
+        "Flowering": {
+          "apple tree": {},
+          "magnolia": {}
+        }
+      }
+    };
+    function createDomText(obj) {
+      // 可以直接用字符串拼接
+      let li = '';
+      let ul ;
+      for (let key of Object.keys(obj)) {
+        li += `<li>${key}${createDomText(obj[key])}</li>`
+      }
+      li && (ul = `<ul>${li}</ul>`)
+      return ul;
+    }
+
+    function createDom(obj) {
+      if (!Object.keys(obj).length) return ;
+      // 创建元素
+      let ul = document.createElement('ul');
+
+      for(let item of Object.keys(obj)) {
+        let li = document.createElement('li');
+        li.innerHTML = item;
+
+        let liChild = createDom(obj[item]);
+        liChild && (li.append(liChild))
+
+        ul.append(li);
+      }
+      return ul;
+    }
+
+    // app.innerHTML = createDomText(treeData);
+    app.append(createDom(treeData))
+
+    // ---遍历tree-------------------
+    // 遍历一个树状结构，要求输出一个数组，数组里元素顺序：从上到下，从左到右
+    var root = {
+      val: "a",
+      child: [
+        {
+          val: "b",
+          child: [{ val: "c" }]
+        },
+        {
+          val: "d",
+          child: [
+            {
+              val: "e"
+            },
+            {
+              val: "f"
+            }
+          ]
+        }
+      ]
+    };
+
+    // Breadth-First Search 广度优先算法
+    function bfs(root) {
+      let quene = [];
+      let res = [];
+      quene.push(root)
+      while(quene.length) {
+        let node = quene.shift();
+        res.push(node.val);
+
+        if (!node.child) continue;
+        for(let child of node.child) {
+          quene.push(child);
+        }
+      }
+      return res;
+    }
+    // console.log(bfs(root))
+
+
+
+    // ---大数相加-------------------
+    function bigNumAdd(a, b) {
+      // a，b分别为字符串类型的值
+      let i = a.length - 1;
+      let j = b.length - 1;
+
+      let carry = 0; // 进位
+      let ret = ''; // 字符串类型
+      // 从最后一位开始计算
+      while(i >= 0 || j >= 0) {
+        let x = 0;
+        let y = 0;
+        let sum = 0;
+
+        if (i >= 0) {
+          x = +a[i]; // 字符串变为数字
+          i --;
+        }
+
+        if (j >= 0) {
+          y = +b[j]; // 字符串变为数字
+          j --;
+        }
+        
+        // 从各位取出两个数，相加，需要添加进位
+        sum = x + y + carry;
+
+        // 是否需要进位
+        if (sum >= 10) {
+          carry = 1;
+          sum -= 10;
+        } else {
+          carry = 0;
+        }
+        // '999' '1'
+        // 第一次：0 + ''
+        ret = sum + ret;
+      }
+      // 如果有进位，直接拼接在ret前即可
+      if (carry) {
+        ret = carry + ret; // ret是字符串，直接拼接即可
+      }
+
+      return ret;
+    }
+    console.log(bigNumAdd('999', '1'))
+    console.log(bigNumAdd('9007199254740992', '1'))
+  </script>
+</body>
+
+</html>
