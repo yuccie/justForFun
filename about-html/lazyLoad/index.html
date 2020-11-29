@@ -1,0 +1,75 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lazyload</title>
+    <style>
+      .image-item {
+        display: block;
+        margin-bottom: 50px;
+        height: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      src=""
+      class="image-item"
+      lazyload="true"
+      data-original="images/1.png"
+    />
+    <script>
+      class EventEmitter {
+        constructor() {
+          this.events = {}
+        }
+
+        // on事件
+        on(eventName, cb) {
+          if (!this.events[eventName]) {
+            this.events[eventName] = [cb];
+          } else {
+            this.events[eventName].push(cb)
+          }
+        }
+        // emit
+        emit(eventName, ...args) {
+          if (this.events[eventName]) {
+            this.events[eventName].forEach(event => event.apply(this, args))
+          }
+        }
+        // 移除事件
+        remove(eventName, cb) {
+          if (!this.events[eventName]) {
+            return;
+          } else {
+            this.events[eventName] = this.events[eventName].filter(event => event !== cb);
+          }
+        }
+        // 只绑定一次
+        once(eventName, cb) {
+          const fn = () => {
+            cb();
+            this.remove(eventName, fn)
+          }
+          this.on(eventName, cb)
+        }
+      }
+
+      const event = new EventEmitter()
+
+      const handle = (...pyload) => console.log(pyload)
+
+      event.on('click', handle)
+
+      event.emit('click', 100, 200, 300, 100)
+
+      event.remove('click', handle)
+
+      event.once('dbclick', function() {
+        console.log('click')
+      })
+
+      event.emit('dbclick', 100)
+    </script>
+  </body>
+</html>
