@@ -15,5 +15,9 @@
   "dependencies": {
     "node-static": "^0.7.11",
     "ws": "^7.3.1"
+  },
+  "devDependencies": {
+    "webpack": "^5.31.2",
+    "webpack-cli": "^4.6.0"
   }
 }

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 参考：https://juejin.cn/post/6844903614440439822 -->
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+    <div id="app">
+        <!-- 方案一：此时输入中文，会出现异常 -->
+        <p>the input is: <span class="name">{{name}}</span></p>
+        <input :value="name" @input="format">
+
+        <!-- 方案二：使用v-model，因为v-model内部对输入法组合做了处理，在输入未完成时，不会赋值 -->
+        <p>the input is: <span class="name1">{{name1}}</span></p>
+        <input v-model="name1" @input="format1">
+
+        <!-- 方案三：在失去焦点时，再调用格式化的方法 -->
+        <p>the input is: <span class="name2">{{name2}}</span></p>
+        <input v-model="name2" @input="name2 = $event.target.value" @change="format2">
+
+        <!-- 方案四：监听 input 事件，同时判断输入法组合过程 -->
+        <p>the input is: <span class="name3">{{name3}}</span></p>
+        <input :value="name3" @input="format3" @compositionstart="start" @compositionend="end">
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                name: '',
+                name1: '',
+                name2: '',
+                name3: '',
+                composing: false
+            },
+            methods: {
+                format($event) {
+                    this.name = $event.target.value.toUpperCase();
+                },
+                format1($event) {
+                    this.name1 = $event.target.value.toUpperCase();
+                },
+                format2($event) {
+                    this.name2 = $event.target.value.toUpperCase();
+                },
+                format3($event) {
+                    if (this.composing) return;
+
+                    this.name3 = $event.target.value.toUpperCase();
+                },
+                start() {
+                    this.composing = true;
+                },
+                end($event) {
+                    this.composing = false;
+                    this.name3 = $event.target.value.toUpperCase();
+                },
+            }
+        })
+    </script>
+</body>
+</html>

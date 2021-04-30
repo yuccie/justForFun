@@ -1,5 +1,5 @@
 {
-  "name": "manual-webpack",
+  "name": "simple-webpack-1",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,6 +13,6 @@
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "babel-traverse": "^6.26.0",
-    "babylon": "^6.18.0"
+    "babylon": "^7.0.0-beta.34"
   }
 }
