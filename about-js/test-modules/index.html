@@ -18,7 +18,12 @@
     // 另外必须启动服务，本地文件访问不行
     // 每个 <script type="module"> 也存在独立的顶级作用域
     // 模块代码只执行一次。导出仅创建一次，然后会在导入之间共享。
-    import { sayHi } from './modulesOne.js'
+    import { sayHi, one } from './modulesOne.js'
+    console.log('start', one)
+
+    setTimeout(() => console.log(one, '3s'), 3000)
+    setTimeout(() => one = 'haha', 4000)
+    console.log(Object.getOwnPropertyDescriptors(one))
     sayHi();
     // 优化器（optimizer）就会检测到它，并从打包好的代码中删除那些未被使用的函数，从而使构建更小。这就是所谓的“摇树（tree-shaking）
 

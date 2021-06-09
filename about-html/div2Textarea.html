@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<head>
+    <title>div模拟textarea</title>
+    <style>
+        .editdiv {
+            border: 1px solid #a0b3d6;
+            width: 500px;
+            min-height: 200px;
+            font-size: 14px;
+            padding: 4px;
+            color: #333;
+            outline: 0;
+            /* 解决聚焦边框 */
+        }
+
+        /* 添加placeholder属性 */
+        .editdiv:empty::before {
+            content: attr(placeholder);
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 全局属性 contenteditable  是一个枚举属性，表示元素是否可被用户编辑。 如果可以，浏览器会修改元素的部件以允许编辑。 -->
+    <div class="editdiv" contenteditable="true" placeholder="请输入内容..."></div>
+</body>
+
+</html>

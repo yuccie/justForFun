@@ -1,0 +1,74 @@
+<div class="poi-skeleton">
+    <div class="header">
+        <div class="base pic"></div>
+        <div class="detail">
+            <p class="base title"></p>
+            <p class="base item"></p>
+            <p class="base item"></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .poi-skeleton {
+        padding: 25px 19px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .base {
+        background: linear-gradient(100deg,
+                hsla(0, 0%, 74.5%, 0.2) 25%,
+                hsla(0, 0%, 50.6%, 0.24) 37%,
+                hsla(0, 0%, 74.5%, 0.2) 63%);
+        /* 背景的宽度400%，高度不变，相当于横向拉伸了四倍 */
+        background-size: 400% 100%; 
+        /* background-size: 100% 100%; */
+        animation: moveLight ease 1.5s infinite;
+    }
+
+    .header {
+        display: flex;
+        margin-top: 55px;
+    }
+
+    .pic {
+        width: 120px;
+        height: 120px;
+        border-radius: 10px;
+        margin-right: 25px;
+        background-color: rgb(242 243 245);
+    }
+
+    .detail {
+        flex: 1;
+        margin-top: 15px;
+    }
+
+    .detail .title {
+        height: 22px;
+        width: 80%;
+        background-color: rgb(242 243 245);
+        margin-bottom: 15px;
+        border-radius: 4px;
+    }
+
+    .detail .item {
+        height: 16px;
+        background-color: rgb(242 243 245);
+        margin-bottom: 10px;
+        border-radius: 2px;
+    }
+
+
+
+    @keyframes moveLight {
+        0% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0 50%;
+        }
+    }
+</style>
