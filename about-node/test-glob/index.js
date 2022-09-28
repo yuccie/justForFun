@@ -12,6 +12,7 @@ console.log(result)
 // 异步io，
 console.time('glob')
 console.log(__dirname + "/**/*")
+// node里的回调函数是由一定规范的，参数一是err
 glob(__dirname + "/**/*", function(err, data){
     console.log('data', data)
 })
